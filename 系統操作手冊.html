@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業團膳點餐系統 - 操作手冊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .page {
+            background: white;
+            max-width: 210mm;
+            margin: 20px auto;
+            padding: 30mm 20mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #e78232 0%, #c66a1f 100%);
+            color: white;
+        }
+
+        .cover h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .cover h2 {
+            font-size: 32px;
+            margin-bottom: 60px;
+            font-weight: normal;
+        }
+
+        .cover .info {
+            font-size: 18px;
+            margin-top: 100px;
+            opacity: 0.9;
+        }
+
+        h1 {
+            color: #e78232;
+            font-size: 32px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e78232;
+        }
+
+        h2 {
+            color: #c66a1f;
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .note {
+            background: #fff8dc;
+            border-left: 4px solid #e78232;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #ffe6e6;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: #e78232;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .toc a {
+            color: #e78232;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Courier New", monospace;
+        }
+
+        .screenshot {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            background: #f9f9f9;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .step {
+            counter-increment: step;
+            margin: 20px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .step:before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #e78232;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 封面 -->
+    <div class="page cover">
+        <h1>企業團膳點餐系統</h1>
+        <h2>系統操作手冊</h2>
+        <div class="info">
+            <p>版本：1.0</p>
+            <p>更新日期：2026年1月</p>
+            <p>適用對象：系統使用者及管理員</p>
+        </div>
+    </div>
+
+    <!-- 目錄 -->
+    <div class="page">
+        <h1>目錄</h1>
+        <div class="toc">
+            <ul>
+                <li><a href="#section1">1. 系統概述</a></li>
+                <li><a href="#section2">2. 系統登入</a></li>
+                <li><a href="#section3">3. 一般使用者操作</a>
+                    <ul style="margin-left: 20px;">
+                        <li><a href="#section3-1">3.1 新版介面操作 (index.aspx)</a></li>
+                        <li><a href="#section3-2">3.2 傳統介面操作 (default.aspx)</a></li>
+                    </ul>
+                </li>
+                <li><a href="#section4">4. 管理員功能</a>
+                    <ul style="margin-left: 20px;">
+                        <li><a href="#section4-1">4.1 餐點管理</a></li>
+                        <li><a href="#section4-2">4.2 訂單管理</a></li>
+                        <li><a href="#section4-3">4.3 報表功能</a></li>
+                        <li><a href="#section4-4">4.4 郵件通知</a></li>
+                    </ul>
+                </li>
+                <li><a href="#section5">5. 訪客點餐</a></li>
+                <li><a href="#section6">6. 常見問題</a></li>
+                <li><a href="#section7">7. 系統架構說明</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第一章：系統概述 -->
+    <div class="page" id="section1">
+        <h1>1. 系統概述</h1>
+
+        <h2>1.1 系統簡介</h2>
+        <p>企業團膳點餐系統是一套專為企業員工設計的線上訂餐平台，提供便捷的每日訂餐服務，支援多種餐點類型選擇，並具備完善的訂單管理與報表統計功能。</p>
+
+        <h2>1.2 主要功能</h2>
+        <ul>
+            <li><strong>員工訂餐：</strong>支援每週五個工作日的餐點預訂</li>
+            <li><strong>多樣選擇：</strong>提供自助餐、簡餐、麵食、輕食餐、素食等多種餐點類型</li>
+            <li><strong>彈性管理：</strong>可選擇訂餐或登記不訂餐</li>
+            <li><strong>訂單管理：</strong>支援訂單查詢、修改與取消</li>
+            <li><strong>報表統計：</strong>提供多維度訂餐統計報表</li>
+            <li><strong>郵件通知：</strong>自動發送訂餐提醒與統計報表</li>
+            <li><strong>訪客訂餐：</strong>訪客專用訂餐介面</li>
+        </ul>
+
+        <h2>1.3 系統特色</h2>
+        <div class="info-box">
+            <ul>
+                <li>響應式設計，支援電腦與手機操作</li>
+                <li>提供新舊兩版使用者介面，滿足不同使用習慣</li>
+                <li>智慧訂餐時間管理，避免逾期訂餐</li>
+                <li>完善的權限管理，區分一般使用者與管理員</li>
+                <li>支援代訂功能，方便部門主管協助訂餐</li>
+            </ul>
+        </div>
+
+        <h2>1.4 訂餐規則</h2>
+        <div class="warning">
+            <strong>重要規則：</strong>
+            <ul>
+                <li>點餐時間：需於<strong>前一日 16:00 前</strong>完成訂餐</li>
+                <li>取消時間：可於<strong>當天 08:40 前</strong>取消訂餐</li>
+                <li>每日限選一種餐點</li>
+                <li>可登記"不訂餐"以避免浪費</li>
+                <li>素食選項隨時可選</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第二章：系統登入 -->
+    <div class="page" id="section2">
+        <h1>2. 系統登入</h1>
+
+        <h2>2.1 登入頁面</h2>
+        <p>系統登入頁面位於：<code>login.aspx</code></p>
+
+        <h2>2.2 登入步驟</h2>
+        <div class="step">
+            <strong>開啟系統登入頁面</strong>
+            <p>在瀏覽器中輸入系統網址，進入登入頁面</p>
+        </div>
+
+        <div class="step">
+            <strong>輸入登入資訊</strong>
+            <ul>
+                <li><strong>工號：</strong>輸入您的員工工號</li>
+                <li><strong>密碼：</strong>輸入系統密碼（一般使用者無需密碼）</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>選擇登入方式</strong>
+            <ul>
+                <li>一般員工登入後會進入新版介面 (index.aspx)</li>
+                <li>管理員登入後會進入管理介面 (default.aspx)</li>
+            </ul>
+        </div>
+
+        <h2>2.3 訪客登入</h2>
+        <div class="note">
+            <strong>訪客帳號：</strong>
+            <ul>
+                <li>工號：26712071</li>
+                <li>密碼：26712071</li>
+                <li>登入後會進入訪客專用訂餐介面 (guest.aspx)</li>
+            </ul>
+        </div>
+
+        <h2>2.4 登入問題排除</h2>
+        <table>
+            <tr>
+                <th>問題</th>
+                <th>可能原因</th>
+                <th>解決方式</th>
+            </tr>
+            <tr>
+                <td>工號無效</td>
+                <td>工號不存在或未開通訂餐權限</td>
+                <td>聯繫系統管理員確認工號狀態</td>
+            </tr>
+            <tr>
+                <td>密碼錯誤</td>
+                <td>管理員密碼輸入錯誤</td>
+                <td>確認密碼是否正確，或聯繫管理員重設</td>
+            </tr>
+            <tr>
+                <td>無法登入</td>
+                <td>帳號停用或未在職</td>
+                <td>確認員工在職狀態 (issuestate=2)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 第三章：一般使用者操作 -->
+    <div class="page" id="section3">
+        <h1>3. 一般使用者操作</h1>
+
+        <p>系統提供兩種使用者介面，您可以根據個人喜好選擇使用：</p>
+        <ul>
+            <li><strong>新版介面 (index.aspx)：</strong>現代化設計，支援手機操作，介面簡潔易用</li>
+            <li><strong>傳統介面 (default.aspx)：</strong>功能完整，適合桌面電腦操作</li>
+        </ul>
+    </div>
+
+    <!-- 3.1 新版介面 -->
+    <div class="page" id="section3-1">
+        <h1>3.1 新版介面操作 (index.aspx)</h1>
+
+        <h2>3.1.1 介面說明</h2>
+        <p>新版介面採用卡片式設計，提供直覺的視覺化操作體驗。</p>
+
+        <h3>主要功能區域</h3>
+        <ul>
+            <li><strong>頂部導航欄：</strong>顯示系統名稱與使用者資訊</li>
+            <li><strong>日期選擇欄：</strong>週一至週五的日期切換，支援上下週切換</li>
+            <li><strong>訂餐提醒：</strong>重要訂餐規則提示</li>
+            <li><strong>餐點卡片區：</strong>顯示當日可選餐點</li>
+            <li><strong>週統計欄：</strong>顯示本週訂餐概況</li>
+        </ul>
+
+        <h2>3.1.2 訂餐流程</h2>
+
+        <div class="step">
+            <strong>選擇日期</strong>
+            <ul>
+                <li>點擊日期標籤切換不同日期</li>
+                <li>使用左右箭頭切換上週/下週</li>
+                <li>系統會顯示該日期可選的餐點</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>選擇餐點</strong>
+            <ul>
+                <li>瀏覽餐點卡片，查看餐點資訊</li>
+                <li>點擊卡片可查看詳細說明</li>
+                <li>點擊"選擇此餐點"按鈕進行選擇</li>
+                <li>已選餐點會顯示綠色勾選標記</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>查看週概況</strong>
+            <ul>
+                <li>桌面版：右側固定顯示週統計</li>
+                <li>手機版：底部可展開查看週統計</li>
+                <li>顯示每日訂餐狀態與已登記數量</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>保存訂單</strong>
+            <p>選擇完成後，點擊"保存本週登記"按鈕儲存所有變更</p>
+        </div>
+
+        <h2>3.1.3 餐點類型</h2>
+        <table>
+            <tr>
+                <th>類型</th>
+                <th>圖示</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>本日自助餐</td>
+                <td>🍱</td>
+                <td>當日自助餐選項</td>
+            </tr>
+            <tr>
+                <td>精選簡餐</td>
+                <td>🍛</td>
+                <td>簡餐便當</td>
+            </tr>
+            <tr>
+                <td>精選麵食</td>
+                <td>🍜</td>
+                <td>各式麵食選擇</td>
+            </tr>
+            <tr>
+                <td>輕食餐</td>
+                <td>🥗</td>
+                <td>健康輕食選項</td>
+            </tr>
+            <tr>
+                <td>健康素食</td>
+                <td>🥬</td>
+                <td>素食餐點（全素/蛋奶素）</td>
+            </tr>
+            <tr>
+                <td>今日不訂餐</td>
+                <td>🚫</td>
+                <td>登記不訂餐</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>注意事項：</strong>
+            <ul>
+                <li>只能訂到後天的餐點（今天+2天）</li>
+                <li>超過可訂時間的日期會顯示"僅供查看，無法訂餐"</li>
+                <li>素食選項和不訂餐選項隨時可選</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 3.2 傳統介面 -->
+    <div class="page" id="section3-2">
+        <h1>3.2 傳統介面操作 (default.aspx)</h1>
+
+        <h2>3.2.1 介面說明</h2>
+        <p>傳統介面使用表格式佈局，提供完整的訂餐功能。</p>
+
+        <h2>3.2.2 訂餐步驟</h2>
+
+        <div class="step">
+            <strong>選擇週次</strong>
+            <p>使用日期選擇器選擇要訂餐的週次，系統會自動計算並顯示該週的週一至週五日期</p>
+        </div>
+
+        <div class="step">
+            <strong>勾選餐點</strong>
+            <p>在表格中勾選要訂購的餐點：</p>
+            <ul>
+                <li>每一欄代表一天（週一至週五）</li>
+                <li>每一列代表一種餐點類型</li>
+                <li>勾選核取方塊表示訂餐</li>
+                <li>數字欄位可輸入訂購數量（預設為1）</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>提交訂單</strong>
+            <p>勾選完成後，點擊"送出"按鈕儲存訂單</p>
+        </div>
+
+        <h2>3.2.3 特殊功能</h2>
+
+        <h3>代訂功能</h3>
+        <p>如果您具有代訂權限（LA4=1），可以為其他員工訂餐：</p>
+        <ul>
+            <li>在使用者下拉選單中選擇要代訂的員工</li>
+            <li>按照正常流程進行訂餐</li>
+            <li>系統會記錄代訂者資訊</li>
+        </ul>
+
+        <h3>不訂餐登記</h3>
+        <div class="info-box">
+            <p>若當日不需要訂餐，請務必登記"不訂餐"：</p>
+            <ul>
+                <li>避免系統誤判為未訂餐</li>
+                <li>方便統計實際用餐人數</li>
+                <li>節省公司資源</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第四章：管理員功能 -->
+    <div class="page" id="section4">
+        <h1>4. 管理員功能</h1>
+
+        <p>管理員登入後可存取完整的系統管理功能，包括餐點管理、訂單管理、報表統計等。</p>
+
+        <h2>4.1 管理員權限</h2>
+        <table>
+            <tr>
+                <th>權限等級</th>
+                <th>權限標記</th>
+                <th>可執行功能</th>
+            </tr>
+            <tr>
+                <td>一般使用者</td>
+                <td>LA2=0</td>
+                <td>個人訂餐</td>
+            </tr>
+            <tr>
+                <td>代訂者</td>
+                <td>LA4=1</td>
+                <td>個人訂餐 + 代訂功能</td>
+            </tr>
+            <tr>
+                <td>管理員</td>
+                <td>LA2=1</td>
+                <td>完整管理權限</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 4.1 餐點管理 -->
+    <div class="page" id="section4-1">
+        <h1>4.1 餐點管理 (lunch.aspx)</h1>
+
+        <h2>4.1.1 新增餐點</h2>
+
+        <div class="step">
+            <strong>進入餐點管理</strong>
+            <p>在管理介面點擊"新增餐點"按鈕</p>
+        </div>
+
+        <div class="step">
+            <strong>填寫餐點資訊</strong>
+            <ul>
+                <li><strong>日期：</strong>選擇餐點供應日期</li>
+                <li><strong>餐點類型：</strong>選擇餐點分類（自助餐/簡餐/麵食/輕食餐）</li>
+                <li><strong>餐點名稱：</strong>輸入餐點詳細說明</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>儲存餐點</strong>
+            <p>確認資訊無誤後，點擊"儲存"按鈕</p>
+        </div>
+
+        <h2>4.1.2 修改餐點</h2>
+        <ul>
+            <li>在餐點列表中找到要修改的餐點</li>
+            <li>點擊編輯按鈕</li>
+            <li>修改餐點資訊</li>
+            <li>點擊儲存按鈕</li>
+        </ul>
+
+        <h2>4.1.3 刪除餐點</h2>
+        <div class="warning">
+            <strong>注意：</strong>
+            <ul>
+                <li>刪除餐點前請確認沒有相關訂單</li>
+                <li>已有訂單的餐點無法刪除</li>
+                <li>刪除操作無法復原</li>
+            </ul>
+        </div>
+
+        <h2>4.1.4 餐點資料表結構</h2>
+        <table>
+            <tr>
+                <th>欄位名稱</th>
+                <th>資料型態</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>LUNCHID</td>
+                <td>NUMBER</td>
+                <td>餐點ID（主鍵）</td>
+            </tr>
+            <tr>
+                <td>LUNCHDATE</td>
+                <td>DATE</td>
+                <td>餐點日期</td>
+            </tr>
+            <tr>
+                <td>LUNCHTYPE</td>
+                <td>VARCHAR2</td>
+                <td>餐點類型</td>
+            </tr>
+            <tr>
+                <td>LUNCHNAME</td>
+                <td>VARCHAR2</td>
+                <td>餐點名稱/說明</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 4.2 訂單管理 -->
+    <div class="page" id="section4-2">
+        <h1>4.2 訂單管理 (orders.aspx)</h1>
+
+        <h2>4.2.1 查詢訂單</h2>
+        <p>提供多種查詢條件：</p>
+        <ul>
+            <li>依日期範圍查詢</li>
+            <li>依員工工號查詢</li>
+            <li>依餐點類型查詢</li>
+            <li>依訂單狀態查詢</li>
+        </ul>
+
+        <h2>4.2.2 訂單操作</h2>
+
+        <h3>修改訂單</h3>
+        <div class="step">
+            <p>在訂單列表中選擇要修改的訂單</p>
+        </div>
+        <div class="step">
+            <p>變更訂單內容（餐點、數量等）</p>
+        </div>
+        <div class="step">
+            <p>儲存變更</p>
+        </div>
+
+        <h3>取消訂單</h3>
+        <ul>
+            <li>選擇要取消的訂單</li>
+            <li>將訂購數量改為0或刪除訂單</li>
+            <li>確認取消操作</li>
+        </ul>
+
+        <h2>4.2.3 訂單資料表結構</h2>
+        <table>
+            <tr>
+                <th>欄位名稱</th>
+                <th>資料型態</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>ORDERID</td>
+                <td>NUMBER</td>
+                <td>訂單ID（主鍵）</td>
+            </tr>
+            <tr>
+                <td>ORDERDATE</td>
+                <td>DATE</td>
+                <td>訂餐日期</td>
+            </tr>
+            <tr>
+                <td>USERNO</td>
+                <td>VARCHAR2</td>
+                <td>訂餐人工號</td>
+            </tr>
+            <tr>
+                <td>LUNCHID</td>
+                <td>NUMBER</td>
+                <td>餐點ID（0表示素食或不訂餐）</td>
+            </tr>
+            <tr>
+                <td>ORDERNUM</td>
+                <td>NUMBER</td>
+                <td>訂購數量</td>
+            </tr>
+            <tr>
+                <td>UPDATEDATE</td>
+                <td>DATE</td>
+                <td>更新時間</td>
+            </tr>
+            <tr>
+                <td>ORDERIP</td>
+                <td>VARCHAR2</td>
+                <td>訂單IP位址</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 4.3 報表功能 -->
+    <div class="page" id="section4-3">
+        <h1>4.3 報表功能</h1>
+
+        <h2>4.3.1 報表類型</h2>
+
+        <h3>1. 個人訂單報表 (report.aspx)</h3>
+        <ul>
+            <li>查詢個人歷史訂單記錄</li>
+            <li>顯示訂餐日期、餐點類型、數量等資訊</li>
+            <li>可匯出Excel報表</li>
+        </ul>
+
+        <h3>2. 訂餐統計報表 (report1.aspx)</h3>
+        <p>依餐點類型統計訂餐人數：</p>
+        <ul>
+            <li>選擇日期範圍</li>
+            <li>選擇餐點類型（可選全部）</li>
+            <li>顯示各部門訂餐明細</li>
+            <li>統計各類型訂餐總數</li>
+            <li>支援Excel匯出</li>
+        </ul>
+
+        <h3>3. 部門統計報表 (report2.aspx)</h3>
+        <ul>
+            <li>依部門統計訂餐情況</li>
+            <li>顯示部門訂餐人數與比例</li>
+            <li>可匯出統計數據</li>
+        </ul>
+
+        <h3>4. 日期統計報表 (report3.aspx)</h3>
+        <ul>
+            <li>顯示指定日期的訂餐總覽</li>
+            <li>列出各類型餐點訂購數量</li>
+            <li>協助備餐作業</li>
+        </ul>
+
+        <h3>5. 未訂餐報表 (report4.aspx)</h3>
+        <ul>
+            <li>顯示未訂餐員工名單</li>
+            <li>協助追蹤訂餐狀況</li>
+            <li>發送提醒通知</li>
+        </ul>
+
+        <h3>6. 月報表 (report5.aspx)</h3>
+        <ul>
+            <li>月份訂餐統計</li>
+            <li>顯示每日訂餐趨勢</li>
+            <li>提供管理決策參考</li>
+        </ul>
+
+        <h2>4.3.2 報表匯出</h2>
+        <p>所有報表皆支援Excel格式匯出：</p>
+        <div class="step">
+            <p>設定查詢條件</p>
+        </div>
+        <div class="step">
+            <p>點擊"匯出Excel"按鈕</p>
+        </div>
+        <div class="step">
+            <p>選擇儲存位置並下載檔案</p>
+        </div>
+    </div>
+
+    <!-- 4.4 郵件通知 -->
+    <div class="page" id="section4-4">
+        <h1>4.4 郵件通知功能</h1>
+
+        <h2>4.4.1 通知類型</h2>
+
+        <h3>1. 訂餐提醒 (sendremind.aspx)</h3>
+        <ul>
+            <li>發送訂餐提醒郵件給所有員工</li>
+            <li>提醒訂餐截止時間</li>
+            <li>建議每日定時執行</li>
+        </ul>
+
+        <h3>2. 未訂餐通知 (sendnoorderuser.aspx)</h3>
+        <ul>
+            <li>通知未訂餐的員工</li>
+            <li>提醒及時完成訂餐</li>
+            <li>減少遺漏</li>
+        </ul>
+
+        <h3>3. 訂餐統計郵件 (sendreport.aspx)</h3>
+        <ul>
+            <li>發送訂餐統計報表給相關人員</li>
+            <li>協助備餐作業</li>
+            <li>提供管理資訊</li>
+        </ul>
+
+        <h3>4. 明日餐點通知 (sendlunch.aspx)</h3>
+        <ul>
+            <li>發送明日餐點資訊</li>
+            <li>讓員工了解餐點內容</li>
+        </ul>
+
+        <h3>5. 月度提醒 (sendmonthmind.aspx)</h3>
+        <ul>
+            <li>每月訂餐提醒</li>
+            <li>月度統計資訊</li>
+        </ul>
+
+        <h3>6. 個人訂餐確認 (sendmailuser.aspx)</h3>
+        <ul>
+            <li>發送個人訂餐確認郵件</li>
+            <li>提供訂單明細</li>
+        </ul>
+
+        <h2>4.4.2 郵件設定</h2>
+        <div class="note">
+            <p>郵件功能需要預先設定：</p>
+            <ul>
+                <li>SMTP伺服器位址</li>
+                <li>寄件者郵件帳號</li>
+                <li>郵件範本內容</li>
+                <li>收件者清單設定</li>
+            </ul>
+        </div>
+
+        <h2>4.4.3 自動化排程</h2>
+        <p>建議設定以下自動化排程：</p>
+        <table>
+            <tr>
+                <th>通知類型</th>
+                <th>執行時間</th>
+                <th>頻率</th>
+            </tr>
+            <tr>
+                <td>訂餐提醒</td>
+                <td>每日 14:00</td>
+                <td>每日</td>
+            </tr>
+            <tr>
+                <td>未訂餐通知</td>
+                <td>每日 15:00</td>
+                <td>每日</td>
+            </tr>
+            <tr>
+                <td>訂餐統計</td>
+                <td>每日 16:30</td>
+                <td>每日</td>
+            </tr>
+            <tr>
+                <td>明日餐點</td>
+                <td>每日 17:00</td>
+                <td>每日</td>
+            </tr>
+            <tr>
+                <td>月度提醒</td>
+                <td>每月1日 09:00</td>
+                <td>每月</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 第五章：訪客點餐 -->
+    <div class="page" id="section5">
+        <h1>5. 訪客點餐 (guest.aspx)</h1>
+
+        <h2>5.1 功能說明</h2>
+        <p>訪客點餐系統專為非員工訪客設計，提供簡化的訂餐流程。</p>
+
+        <h2>5.2 訪客登入</h2>
+        <div class="info-box">
+            <ul>
+                <li>工號：26712071</li>
+                <li>密碼：26712071</li>
+            </ul>
+        </div>
+
+        <h2>5.3 訪客訂餐流程</h2>
+
+        <div class="step">
+            <strong>選擇日期</strong>
+            <p>使用日期選擇器選擇用餐日期</p>
+        </div>
+
+        <div class="step">
+            <strong>選擇餐點</strong>
+            <p>從可用餐點中選擇需要的餐點類型</p>
+        </div>
+
+        <div class="step">
+            <strong>填寫資訊</strong>
+            <ul>
+                <li>訪客姓名（選填）</li>
+                <li>聯絡方式（選填）</li>
+                <li>訂購數量</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>提交訂單</strong>
+            <p>確認資訊後送出訂單</p>
+        </div>
+
+        <h2>5.4 訪客訂餐規則</h2>
+        <div class="warning">
+            <ul>
+                <li>訪客訂單不顯示工號資訊</li>
+                <li>需提前一天訂餐</li>
+                <li>訂餐後請聯繫接待人員確認</li>
+                <li>訪客訂單會單獨統計</li>
+            </ul>
+        </div>
+
+        <h2>5.5 訪客訂單管理</h2>
+        <p>管理員可在訂單管理系統中查看訪客訂單：</p>
+        <ul>
+            <li>訪客訂單的工號顯示為空白或特殊標記</li>
+            <li>可在報表中篩選訪客訂單</li>
+            <li>訪客訂餐納入總訂餐統計</li>
+        </ul>
+    </div>
+
+    <!-- 第六章：常見問題 -->
+    <div class="page" id="section6">
+        <h1>6. 常見問題</h1>
+
+        <h2>6.1 訂餐相關</h2>
+
+        <h3>Q1: 忘記訂餐怎麼辦？</h3>
+        <p><strong>A:</strong> 請於當天 08:40 前聯繫管理員協助處理。超過時間可能無法補訂。</p>
+
+        <h3>Q2: 可以一次訂多份嗎？</h3>
+        <p><strong>A:</strong> 一般員工建議訂1份。如需代訂，請使用代訂功能或聯繫管理員。</p>
+
+        <h3>Q3: 如何取消已訂的餐點？</h3>
+        <p><strong>A:</strong> 在新版介面中重新選擇其他餐點或選擇"不訂餐"，然後保存即可。傳統介面取消勾選後送出。</p>
+
+        <h3>Q4: 素食餐點如何訂購？</h3>
+        <p><strong>A:</strong> 素食選項隨時可選，不受訂餐時間限制。在餐點列表中選擇"健康素食"即可。</p>
+
+        <h3>Q5: 可以修改已送出的訂單嗎？</h3>
+        <p><strong>A:</strong> 可以，但需在訂餐時間截止前（前一日16:00前）完成修改。</p>
+
+        <h2>6.2 系統操作</h2>
+
+        <h3>Q6: 為什麼看不到某些日期的餐點？</h3>
+        <p><strong>A:</strong> 可能原因：</p>
+        <ul>
+            <li>該日期尚未建立餐點資料</li>
+            <li>已超過訂餐時間限制</li>
+            <li>該日為假日未提供餐點</li>
+        </ul>
+
+        <h3>Q7: 手機版和電腦版有什麼差別？</h3>
+        <p><strong>A:</strong> 功能完全相同，僅介面佈局不同。手機版採用響應式設計，更適合小螢幕操作。</p>
+
+        <h3>Q8: 為什麼無法登入系統？</h3>
+        <p><strong>A:</strong> 請檢查：</p>
+        <ul>
+            <li>工號是否正確</li>
+            <li>是否為在職員工（issuestate=2）</li>
+            <li>是否已開通訂餐權限</li>
+            <li>網路連線是否正常</li>
+        </ul>
+
+        <h2>6.3 報表與統計</h2>
+
+        <h3>Q9: 如何查詢個人訂餐記錄？</h3>
+        <p><strong>A:</strong> 進入"個人訂單報表"，設定日期範圍後查詢即可查看歷史記錄。</p>
+
+        <h3>Q10: 報表可以匯出嗎？</h3>
+        <p><strong>A:</strong> 是的，所有報表都支援匯出Excel格式，點擊"匯出Excel"按鈕即可下載。</p>
+
+        <h2>6.4 管理功能</h2>
+
+        <h3>Q11: 如何新增餐點？</h3>
+        <p><strong>A:</strong> 管理員登入後，在管理介面點擊"新增餐點"，填寫餐點資訊後儲存。</p>
+
+        <h3>Q12: 可以批次處理訂單嗎？</h3>
+        <p><strong>A:</strong> 可以使用Excel匯出功能處理大量訂單數據，或使用代訂功能協助多人訂餐。</p>
+
+        <h2>6.5 技術問題</h2>
+
+        <h3>Q13: 系統支援哪些瀏覽器？</h3>
+        <p><strong>A:</strong> 建議使用：</p>
+        <ul>
+            <li>Google Chrome（最新版）</li>
+            <li>Microsoft Edge（最新版）</li>
+            <li>Firefox（最新版）</li>
+            <li>Safari（最新版）</li>
+        </ul>
+
+        <h3>Q14: 手機也可以使用嗎？</h3>
+        <p><strong>A:</strong> 可以。新版介面(index.aspx)特別優化了手機體驗，支援所有主流手機瀏覽器。</p>
+
+        <h3>Q15: 資料多久會更新？</h3>
+        <p><strong>A:</strong> 訂單資料即時更新。報表資料根據查詢條件即時產生。</p>
+    </div>
+
+    <!-- 第七章：系統架構 -->
+    <div class="page" id="section7">
+        <h1>7. 系統架構說明</h1>
+
+        <h2>7.1 技術架構</h2>
+
+        <h3>前端技術</h3>
+        <ul>
+            <li><strong>框架：</strong>ASP.NET Web Forms</li>
+            <li><strong>UI組件：</strong>FineUI Pro (metro_orange主題)</li>
+            <li><strong>新版介面：</strong>HTML5 + JavaScript + TailwindCSS</li>
+            <li><strong>響應式設計：</strong>支援桌面與行動裝置</li>
+        </ul>
+
+        <h3>後端技術</h3>
+        <ul>
+            <li><strong>開發語言：</strong>C# (.NET Framework 4.6)</li>
+            <li><strong>資料庫：</strong>Oracle Database</li>
+            <li><strong>JSON處理：</strong>Newtonsoft.Json</li>
+            <li><strong>通訊協定：</strong>AJAX (PageMethods)</li>
+        </ul>
+
+        <h2>7.2 資料庫結構</h2>
+
+        <h3>主要資料表</h3>
+
+        <h4>1. OMLUNCH (餐點表)</h4>
+        <table>
+            <tr>
+                <th>欄位</th>
+                <th>型態</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>LUNCHID</td>
+                <td>NUMBER</td>
+                <td>餐點ID (主鍵)</td>
+            </tr>
+            <tr>
+                <td>LUNCHDATE</td>
+                <td>DATE</td>
+                <td>餐點日期</td>
+            </tr>
+            <tr>
+                <td>LUNCHTYPE</td>
+                <td>VARCHAR2</td>
+                <td>餐點類型</td>
+            </tr>
+            <tr>
+                <td>LUNCHNAME</td>
+                <td>VARCHAR2</td>
+                <td>餐點名稱</td>
+            </tr>
+        </table>
+
+        <h4>2. OMORDER (訂單表)</h4>
+        <table>
+            <tr>
+                <th>欄位</th>
+                <th>型態</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>ORDERID</td>
+                <td>NUMBER</td>
+                <td>訂單ID (主鍵)</td>
+            </tr>
+            <tr>
+                <td>ORDERDATE</td>
+                <td>DATE</td>
+                <td>訂餐日期</td>
+            </tr>
+            <tr>
+                <td>USERNO</td>
+                <td>VARCHAR2</td>
+                <td>使用者工號</td>
+            </tr>
+            <tr>
+                <td>LUNCHID</td>
+                <td>NUMBER</td>
+                <td>餐點ID</td>
+            </tr>
+            <tr>
+                <td>ORDERNUM</td>
+                <td>NUMBER</td>
+                <td>訂購數量</td>
+            </tr>
+            <tr>
+                <td>USERNAME</td>
+                <td>VARCHAR2</td>
+                <td>使用者姓名</td>
+            </tr>
+            <tr>
+                <td>SHIFTNAME</td>
+                <td>VARCHAR2</td>
+                <td>部門名稱</td>
+            </tr>
+            <tr>
+                <td>ORDERIP</td>
+                <td>VARCHAR2</td>
+                <td>訂單IP</td>
+            </tr>
+            <tr>
+                <td>UPDATEDATE</td>
+                <td>DATE</td>
+                <td>更新時間</td>
+            </tr>
+        </table>
+
+        <h4>3. LTUSERS (使用者權限表)</h4>
+        <table>
+            <tr>
+                <th>欄位</th>
+                <th>型態</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>LUSER</td>
+                <td>VARCHAR2</td>
+                <td>使用者工號</td>
+            </tr>
+            <tr>
+                <td>LPW</td>
+                <td>VARCHAR2</td>
+                <td>密碼</td>
+            </tr>
+            <tr>
+                <td>LPROGRAM</td>
+                <td>VARCHAR2</td>
+                <td>程式權限 (OrderMeal)</td>
+            </tr>
+            <tr>
+                <td>LA2</td>
+                <td>VARCHAR2</td>
+                <td>管理員權限 (0/1)</td>
+            </tr>
+            <tr>
+                <td>LA4</td>
+                <td>VARCHAR2</td>
+                <td>代訂權限 (0/1)</td>
+            </tr>
+        </table>
+
+        <h2>7.3 檔案結構</h2>
+
+        <h3>主要頁面檔案</h3>
+        <table>
+            <tr>
+                <th>檔案名稱</th>
+                <th>功能說明</th>
+            </tr>
+            <tr>
+                <td>login.aspx</td>
+                <td>登入頁面</td>
+            </tr>
+            <tr>
+                <td>index.aspx</td>
+                <td>新版使用者介面</td>
+            </tr>
+            <tr>
+                <td>default.aspx</td>
+                <td>傳統管理介面</td>
+            </tr>
+            <tr>
+                <td>guest.aspx</td>
+                <td>訪客訂餐介面</td>
+            </tr>
+            <tr>
+                <td>lunch.aspx</td>
+                <td>餐點管理</td>
+            </tr>
+            <tr>
+                <td>orders.aspx</td>
+                <td>訂單管理</td>
+            </tr>
+            <tr>
+                <td>report.aspx</td>
+                <td>個人訂單報表</td>
+            </tr>
+            <tr>
+                <td>report1.aspx</td>
+                <td>訂餐統計報表</td>
+            </tr>
+            <tr>
+                <td>report2-5.aspx</td>
+                <td>其他報表功能</td>
+            </tr>
+            <tr>
+                <td>send*.aspx</td>
+                <td>郵件通知功能</td>
+            </tr>
+        </table>
+
+        <h2>7.4 系統流程</h2>
+
+        <h3>訂餐流程</h3>
+        <ol>
+            <li>使用者登入系統</li>
+            <li>選擇訂餐日期</li>
+            <li>瀏覽可用餐點</li>
+            <li>選擇餐點並設定數量</li>
+            <li>提交訂單到伺服器</li>
+            <li>系統驗證訂單（時間、權限等）</li>
+            <li>寫入資料庫</li>
+            <li>回傳結果給使用者</li>
+        </ol>
+
+        <h3>資料同步</h3>
+        <ul>
+            <li>前端使用AJAX即時與後端通訊</li>
+            <li>JSON格式傳遞資料</li>
+            <li>PageMethods機制處理非同步請求</li>
+            <li>即時更新使用者介面</li>
+        </ul>
+
+        <h2>7.5 安全性設計</h2>
+
+        <h3>使用者驗證</h3>
+        <ul>
+            <li>Session管理機制</li>
+            <li>工號與密碼驗證</li>
+            <li>在職狀態檢查 (issuestate=2)</li>
+            <li>權限分級管理</li>
+        </ul>
+
+        <h3>資料安全</h3>
+        <ul>
+            <li>SQL參數化查詢，防止SQL Injection</li>
+            <li>輸入驗證與過濾</li>
+            <li>訂單IP記錄</li>
+            <li>操作時間戳記</li>
+        </ul>
+
+        <h2>7.6 效能優化</h2>
+        <ul>
+            <li>資料分頁載入</li>
+            <li>AJAX非同步處理</li>
+            <li>前端快取機制</li>
+            <li>資料庫索引優化</li>
+            <li>響應式圖片載入</li>
+        </ul>
+    </div>
+
+    <!-- 附錄頁 -->
+    <div class="page">
+        <h1>附錄</h1>
+
+        <h2>A. 聯絡資訊</h2>
+        <div class="info-box">
+            <p><strong>系統管理員：</strong></p>
+            <ul>
+                <li>電話分機：請洽IT部門</li>
+                <li>Email：請洽IT部門</li>
+                <li>上班時間：週一至週五 08:00-17:00</li>
+            </ul>
+        </div>
+
+        <h2>B. 版本更新記錄</h2>
+        <table>
+            <tr>
+                <th>版本</th>
+                <th>日期</th>
+                <th>更新內容</th>
+            </tr>
+            <tr>
+                <td>1.0</td>
+                <td>2026-01</td>
+                <td>新增現代化使用者介面 (index.aspx)、手機版支援、響應式設計</td>
+            </tr>
+        </table>
+
+        <h2>C. 術語對照表</h2>
+        <table>
+            <tr>
+                <th>術語</th>
+                <th>說明</th>
+            </tr>
+            <tr>
+                <td>工號</td>
+                <td>員工識別碼 (USERNO)</td>
+            </tr>
+            <tr>
+                <td>餐點ID</td>
+                <td>餐點唯一識別碼 (LUNCHID)</td>
+            </tr>
+            <tr>
+                <td>訂單ID</td>
+                <td>訂單唯一識別碼 (ORDERID)</td>
+            </tr>
+            <tr>
+                <td>部門</td>
+                <td>員工所屬部門 (SHIFTNAME)</td>
+            </tr>
+            <tr>
+                <td>LA2</td>
+                <td>管理員權限標記</td>
+            </tr>
+            <tr>
+                <td>LA4</td>
+                <td>代訂權限標記</td>
+            </tr>
+        </table>
+
+        <h2>D. 快速參考</h2>
+
+        <h3>重要時間點</h3>
+        <div class="note">
+            <ul>
+                <li><strong>訂餐截止：</strong>前一日 16:00</li>
+                <li><strong>取消截止：</strong>當日 08:40</li>
+                <li><strong>可訂範圍：</strong>今日起算後2天內</li>
+            </ul>
+        </div>
+
+        <h3>常用連結</h3>
+        <ul>
+            <li>登入頁面：login.aspx</li>
+            <li>新版介面：index.aspx</li>
+            <li>管理介面：default.aspx</li>
+            <li>訪客訂餐：guest.aspx</li>
+        </ul>
+
+        <div style="text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px solid #e78232;">
+            <p style="color: #999; font-size: 14px;">
+                企業團膳點餐系統操作手冊 v1.0<br>
+                © 2026 版權所有
+            </p>
+        </div>
+    </div>
+
+</body>
+
+</html>

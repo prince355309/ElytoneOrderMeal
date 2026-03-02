@@ -1,0 +1,26 @@
+/* admin-modern.css - Minimal overrides for FineUI controls */
+/* All main styles are inline in default.aspx using Tailwind CSS */
+
+/* Hide FineUI chrome elements */
+.f-mainheader,
+.f-panel-header,
+.f-tab-header,
+.f-region-proxy,
+.f-panel-border {
+    display: none !important;
+}
+
+.f-panel-body,
+.f-contentpanel-body {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+.f-panel,
+.f-contentpanel {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+}
