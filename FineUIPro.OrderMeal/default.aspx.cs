@@ -24,6 +24,7 @@ namespace FineUIPro.OrderMeal
 
         string userno = "EB237003";
         protected string username;
+        protected string orderWindowConfigJson;
         string shiftname = "";
         string LA4 = "0";
         string shiftno = "";
@@ -48,6 +49,8 @@ namespace FineUIPro.OrderMeal
                 LA4 = "0";
                 shiftno = "";
             }
+
+            orderWindowConfigJson = index.GetOrderWindowClientConfigJson();
 
             if (!IsPostBack)
             {
@@ -103,6 +106,21 @@ namespace FineUIPro.OrderMeal
                             if(mt) mt.value = '{1}';
                             if(mdesc) mdesc.value = '{2}';
                         }});", initMenuDate, ddltype.SelectedValue, initialMenuDesc), true);
+
+                // Auto-popup notice settings if user hasn't configured yet
+                string sqlCheckMail = string.Format(
+                    "SELECT isEnable FROM OrderMealNotice WHERE UserNo='{0}' AND Type='1'", userno);
+                string sqlCheckDing = string.Format(
+                    "SELECT isEnable FROM OrderMealNotice WHERE UserNo='{0}' AND Type='2'", userno);
+                string checkMail = ltDll.ltClass.SelectFromMesFirstRow(sqlCheckMail);
+                string checkDing = ltDll.ltClass.SelectFromMesFirstRow(sqlCheckDing);
+                bool mailNotConfigured = (checkMail == null || checkMail == "Null" || checkMail == "");
+                bool dingNotConfigured = (checkDing == null || checkDing == "Null" || checkDing == "");
+                if (mailNotConfigured || dingNotConfigured)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "autoOpenNotice",
+                        "document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { openNoticeModal(); }, 300); });", true);
+                }
             }
         }
 
@@ -216,11 +234,14 @@ namespace FineUIPro.OrderMeal
                 string mailRow = ltDll.ltClass.SelectFromMesFirstRow(sqlMail);
                 string dingRow = ltDll.ltClass.SelectFromMesFirstRow(sqlDing);
 
-                // Default to enabled (true) if no record exists
-                bool mailEnabled = (mailRow != "Null" && mailRow != "") ? mailRow == "1" : true;
-                bool dingTalkEnabled = (dingRow != "Null" && dingRow != "") ? dingRow == "1" : true;
+                // If null/empty/"Null" → user hasn't configured → default to false
+                bool mailNotConfigured = (mailRow == null || mailRow == "Null" || mailRow == "");
+                bool dingNotConfigured = (dingRow == null || dingRow == "Null" || dingRow == "");
+                bool mailEnabled = mailNotConfigured ? false : mailRow == "1";
+                bool dingTalkEnabled = dingNotConfigured ? false : dingRow == "1";
+                bool notConfigured = mailNotConfigured || dingNotConfigured;
 
-                return new { success = true, mailEnabled = mailEnabled, dingTalkEnabled = dingTalkEnabled };
+                return new { success = true, mailEnabled = mailEnabled, dingTalkEnabled = dingTalkEnabled, notConfigured = notConfigured };
             }
             catch (Exception ex)
             {
@@ -326,7 +347,6 @@ namespace FineUIPro.OrderMeal
                     return new { success = false, message = "請重新登入" };
 
                 var orders = JsonConvert.DeserializeObject<Dictionary<string, index.OrderInfo>>(ordersJson);
-                DateTime dtime = index.GetLatestDate(todayNow);
 
                 foreach (var kvp in orders)
                 {
@@ -334,18 +354,7 @@ namespace FineUIPro.OrderMeal
                     var order = kvp.Value;
                     DateTime orderDate = DateTime.Parse(dateStr + " 09:00:00");
 
-                    DateTime todayCutoff = todayNow.Date.AddHours(9);
-
-                    if (orderDate.Date < todayNow.Date)
-                        continue;
-
-                    if (orderDate.Date == todayNow.Date && todayNow >= todayCutoff)
-                        continue;
-
-                    if (orderDate.DayOfWeek == System.DayOfWeek.Saturday || orderDate.DayOfWeek == System.DayOfWeek.Sunday)
-                        continue;
-
-                    if (orderDate.Date > dtime.Date)
+                    if (!index.CanOrderDate(todayNow, orderDate))
                         continue;
 
                     string sql = string.Format("select * from omorder where ORDERDATE=to_date('{0}', 'yyyy-mm-dd') and USERNO='{1}'",

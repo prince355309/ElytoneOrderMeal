@@ -20,8 +20,17 @@ namespace FineUIPro.OrderMeal
         //string shiftname = ltDll.ltClass.SessionRead("OrderMeal", "SHIFTNAME");
         string userno = "EB237003";
         protected string username;
+        protected string orderWindowConfigJson;
         string shiftname = "";
         DateTime today = DateTime.Now;
+
+        // Special holiday order window:
+        // 1. Set EnableSpecialOrderWindow = true
+        // 2. Adjust the start/end dates below
+        // 3. Set it back to false after the holiday to restore the normal 2-workday rule
+        private static readonly bool EnableSpecialOrderWindow = false;
+        private static readonly DateTime SpecialOrderWindowStartDate = new DateTime(2026, 3, 2);
+        private static readonly DateTime SpecialOrderWindowEndDate = new DateTime(2026, 3, 14);
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -39,6 +48,8 @@ namespace FineUIPro.OrderMeal
                 shiftname = "";
             }
 
+            orderWindowConfigJson = GetOrderWindowClientConfigJson();
+
             if (!IsPostBack)
             {
                 // Set user info
@@ -52,6 +63,21 @@ namespace FineUIPro.OrderMeal
 
                 hfWeekData.Value = JsonConvert.SerializeObject(weekData);
                 hfOrderData.Value = JsonConvert.SerializeObject(orderData);
+
+                // Auto-popup notice settings if user hasn't configured yet
+                string sqlCheckMail = string.Format(
+                    "SELECT isEnable FROM OrderMealNotice WHERE UserNo='{0}' AND Type='1'", userno);
+                string sqlCheckDing = string.Format(
+                    "SELECT isEnable FROM OrderMealNotice WHERE UserNo='{0}' AND Type='2'", userno);
+                string checkMail = ltDll.ltClass.SelectFromMesFirstRow(sqlCheckMail);
+                string checkDing = ltDll.ltClass.SelectFromMesFirstRow(sqlCheckDing);
+                bool mailNotConfigured = (checkMail == null || checkMail == "Null" || checkMail == "");
+                bool dingNotConfigured = (checkDing == null || checkDing == "Null" || checkDing == "");
+                if (mailNotConfigured || dingNotConfigured)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "autoOpenNotice",
+                        "document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { openNoticeModal(); }, 300); });", true);
+                }
             }
         }
 
@@ -199,11 +225,14 @@ namespace FineUIPro.OrderMeal
                 string mailRow = ltDll.ltClass.SelectFromMesFirstRow(sqlMail);
                 string dingRow = ltDll.ltClass.SelectFromMesFirstRow(sqlDing);
 
-                // Default to enabled (true) if no record exists
-                bool mailEnabled = (mailRow != "Null" && mailRow != "") ? mailRow == "1" : true;
-                bool dingTalkEnabled = (dingRow != "Null" && dingRow != "") ? dingRow == "1" : true;
+                // If null/empty/"Null" → user hasn't configured → default to false
+                bool mailNotConfigured = (mailRow == null || mailRow == "Null" || mailRow == "");
+                bool dingNotConfigured = (dingRow == null || dingRow == "Null" || dingRow == "");
+                bool mailEnabled = mailNotConfigured ? false : mailRow == "1";
+                bool dingTalkEnabled = dingNotConfigured ? false : dingRow == "1";
+                bool notConfigured = mailNotConfigured || dingNotConfigured;
 
-                return new { success = true, mailEnabled = mailEnabled, dingTalkEnabled = dingTalkEnabled };
+                return new { success = true, mailEnabled = mailEnabled, dingTalkEnabled = dingTalkEnabled, notConfigured = notConfigured };
             }
             catch (Exception ex)
             {
@@ -313,7 +342,6 @@ namespace FineUIPro.OrderMeal
                 }
 
                 var orders = JsonConvert.DeserializeObject<Dictionary<string, OrderInfo>>(ordersJson);
-                DateTime dtime = GetLatestDate(today);
 
                 foreach (var kvp in orders)
                 {
@@ -322,19 +350,7 @@ namespace FineUIPro.OrderMeal
 
                     DateTime orderDate = DateTime.Parse(dateStr + " 09:00:00");
 
-                    // Allow same-day ordering before 09:00; otherwise allow today plus the next 2 workdays
-                    DateTime todayCutoff = today.Date.AddHours(9);
-
-                    if (orderDate.Date < today.Date)
-                        continue;
-
-                    if (orderDate.Date == today.Date && today >= todayCutoff)
-                        continue;
-
-                    if (IsWeekend(orderDate))
-                        continue;
-
-                    if (orderDate.Date > dtime.Date)
+                    if (!CanOrderDate(today, orderDate))
                         continue;
 
                     // Get existing order
@@ -406,8 +422,77 @@ namespace FineUIPro.OrderMeal
             return date.DayOfWeek == System.DayOfWeek.Saturday || date.DayOfWeek == System.DayOfWeek.Sunday;
         }
 
+        private static DateTime GetTodayCutoff(DateTime now)
+        {
+            return now.Date.AddHours(9);
+        }
+
+        public static DateTime GetEarliestOrderDate(DateTime now)
+        {
+            return now < GetTodayCutoff(now) ? now.Date : now.Date.AddDays(1);
+        }
+
+        private static DateTime? GetSpecialOrderWindowEndDate(DateTime now)
+        {
+            if (!EnableSpecialOrderWindow)
+            {
+                return null;
+            }
+
+            if (now.Date < SpecialOrderWindowStartDate.Date)
+            {
+                return null;
+            }
+
+            DateTime earliestOrderDate = GetEarliestOrderDate(now);
+            if (earliestOrderDate.Date > SpecialOrderWindowEndDate.Date)
+            {
+                return null;
+            }
+
+            return SpecialOrderWindowEndDate.Date;
+        }
+
+        public static bool CanOrderDate(DateTime now, DateTime orderDate)
+        {
+            DateTime earliestOrderDate = GetEarliestOrderDate(now);
+            if (orderDate.Date < earliestOrderDate.Date)
+            {
+                return false;
+            }
+
+            DateTime? specialOrderWindowEndDate = GetSpecialOrderWindowEndDate(now);
+            if (specialOrderWindowEndDate.HasValue)
+            {
+                return orderDate.Date <= specialOrderWindowEndDate.Value.Date;
+            }
+
+            if (IsWeekend(orderDate))
+            {
+                return false;
+            }
+
+            return orderDate.Date <= GetLatestDate(now).Date;
+        }
+
+        public static string GetOrderWindowClientConfigJson()
+        {
+            return JsonConvert.SerializeObject(new
+            {
+                enableSpecialOrderWindow = EnableSpecialOrderWindow,
+                specialOrderWindowStartDate = SpecialOrderWindowStartDate.ToString("yyyy-MM-dd"),
+                specialOrderWindowEndDate = SpecialOrderWindowEndDate.ToString("yyyy-MM-dd")
+            });
+        }
+
         public static DateTime GetLatestDate(DateTime dt)
         {
+            DateTime? specialOrderWindowEndDate = GetSpecialOrderWindowEndDate(dt);
+            if (specialOrderWindowEndDate.HasValue)
+            {
+                return specialOrderWindowEndDate.Value.AddHours(9);
+            }
+
             DateTime latestDate = dt.Date;
             int workdayCount = 0;
 

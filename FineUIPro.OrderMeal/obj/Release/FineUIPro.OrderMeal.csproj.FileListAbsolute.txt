@@ -36,3 +36,6 @@ C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\obj\Release\FineUIPro.OrderMeal.
 C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\obj\Release\FineUIPro.OrderMeal.csproj.CopyComplete
 C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\obj\Release\FineUIPro.OrderMeal.dll
 C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\obj\Release\FineUIPro.OrderMeal.pdb
+C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\bin\ltDll.dll
+C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\bin\FineUIPro.dll
+C:\ElytoneGit\OrderMeal_Old\FineUIPro.OrderMeal\bin\FineUIPro.xml

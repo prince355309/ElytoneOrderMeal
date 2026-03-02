@@ -12,28 +12,16 @@ namespace FineUIPro.OrderMeal
     public partial class senduser : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
-        {            
+        {
             string dt = DateTime.Now.ToShortDateString();
             string week = DateTime.Now.DayOfWeek.ToString();
             if (week != "Saturday" && week != "Sunday")
             {
                 StringBuilder body1 = new StringBuilder();
-                string sql = $@"select lower(substr(mail, instr(mail, ',', 3) + 1)) mail,
-                                    username,
-                                    shiftname,
-                                    tblusruserbasis_view.userno
-                               from tblusruserbasis_view
-                               left join ltdll_view3
-                                 on substr(mail,
-                                           instr(mail, '*') + 1,
-                                           instr(mail, '(') - instr(mail, '*') - 1) =
-                                    tblusruserbasis_view.username
-                               left join ltusers
-                                 on ltusers.luser = tblusruserbasis_view.userno
-                               left join OrderMealNotice
-                                 on OrderMealNotice.UserNo = tblusruserbasis_view.userno
-                                and OrderMealNotice.Type = '1'
-                              where tblusruserbasis_view.issuestate = 2
+                string sql = $@"select lower(substr(mail, instr(mail, ',', 3) + 1)) mail,username, shiftname, tblusruserbasis_view.userno 
+from tblusruserbasis_view left join ltdll_view3 on substr(mail,instr(mail, '*') + 1, instr(mail, '(') - instr(mail, '*') - 1) = tblusruserbasis_view.username 
+left join ltusers on ltusers.luser = tblusruserbasis_view.userno 
+left join OrderMealNotice on OrderMealNotice.UserNo = tblusruserbasis_view.userno and OrderMealNotice.Type = '1' where tblusruserbasis_view.issuestate = 2
                                 and ltusers.LPROGRAM = 'OrderMeal'
                                 and tblusruserbasis_view.userno not like 'LB%'
                                 and mail like '%elytone.com'
@@ -45,8 +33,38 @@ namespace FineUIPro.OrderMeal
                                 and tblusruserbasis_view.userno not in
                                     (select userno
                                        from omorder
-                                      where ORDERDATE = to_date('{dt}', 'yyyy-mm-dd')) 
-                                order by shiftname";
+                                      where ORDERDATE = to_date('{dt}', 'yyyy-mm-dd')) order by shiftname";
+
+                sql = $@"select lower(substr(mail, instr(mail, ',', 3) + 1)) mail,
+       username,
+       shiftname,
+       tblusruserbasis_view.userno
+  from tblusruserbasis_view
+  left join ltdll_view3
+    on substr(mail,
+              instr(mail, '*') + 1,
+              instr(mail, '(') - instr(mail, '*') - 1) =
+       tblusruserbasis_view.username
+  left join ltusers
+    on ltusers.luser = tblusruserbasis_view.userno
+  left join OrderMealNotice 
+    on OrderMealNotice.UserNo = tblusruserbasis_view.userno and OrderMealNotice.Type = '1'
+ where tblusruserbasis_view.issuestate = 2
+   and ltusers.LPROGRAM = 'OrderMeal'
+   and tblusruserbasis_view.userno not like 'LB%'
+   and mail like '%elytone.com'
+   and OrderMealNotice.isEnable = 1
+   and tblusruserbasis_view.userno not in (select luser
+                        from ltusers
+                       where lprogram = 'OrderMeal'
+                         and LB1 = 1)
+   and tblusruserbasis_view.userno not in
+       (select userno
+          from omorder
+         where ORDERDATE = to_date('{dt}', 'yyyy-mm-dd'))
+ order by shiftname
+";
+
                 DataTable tb = ltDll.ltClass.SelectFromMes(sql);
                 if (tb.Rows.Count > 0)
                 {
@@ -77,38 +95,45 @@ namespace FineUIPro.OrderMeal
                             //body.Append("<br/>");
                             //body.Append("<span color='red'>2) 當日若已知:不用餐、需外出者或出差者，請務必於8:40分前取消訂餐，節省資源不造成餐食之浪費，謝謝配合</span>");
                             //body.Append("<br/>");
-                            ltDll.ltClass.SendEmail("訂餐提醒", tb.Rows[i]["mail"].ToString(), "", "", body.ToString());
-                            //ltDll.ltClass.SendEmail("訂餐提醒", "janetxie@lightion.com.cn", "", "", body.ToString());
+                            //ltDll.ltClass.SendEmail("訂餐提醒", tb.Rows[i]["mail"].ToString(), "", "", body.ToString());
                         }
                     }
                     body1.Append("</table>");
                     body1.Append("<br/>");
-                    ltDll.ltClass.SendEmail("沒有訂餐的員工", "Angela@elytone.com.tw", "", "", body1.ToString());
-                    //ltDll.ltClass.SendEmail("沒有訂餐的員工", "janetxie@lightion.com.cn", "", "", body1.ToString());
+                    //ltDll.ltClass.SendEmail("沒有訂餐的員工", "Angela@elytone.com.tw", "", "", body1.ToString());
+                    ltDll.ltClass.SendEmail("訂餐提醒", "EdwardLin@elytone.com", "", "", body1.ToString());
+
+                    ltDll.ltClass.SendEmail("沒有訂餐的員工", "EdwardLin@elytone.com", "", "", body1.ToString());
                 }
 
                 // === DingTalk (釘釘) 通知 ===
                 // 查詢已啟用 DingTalk 通知 (Type='2', isEnable=1) 且今天尚未訂餐的使用者
-                string sqlDD = "select n.UserNo from OrderMealNotice n " +
+                string sqlDD = "select n.UserNo,b.username AS CName from OrderMealNotice n " +
                     "inner join ltusers u on u.luser = n.UserNo " +
                     "inner join tblusruserbasis_view b on b.userno = n.UserNo " +
                     "where n.Type = '2' and n.isEnable = 1 " +
                     "and b.issuestate = 2 " +
                     "and u.LPROGRAM = 'OrderMeal' " +
                     "and n.UserNo not like 'LB%' " +
-                    "and n.UserNo not in (select luser from ltusers where lprogram='OrderMeal' and LB1=1) " +
-                    "and n.UserNo not in (select userno from omorder where ORDERDATE = to_date('" + dt + "', 'yyyy-mm-dd'))";
+                    //"and n.UserNo not in (select luser from ltusers where lprogram='OrderMeal' and LB1=1) " +
+                    //"and n.UserNo not in (select userno from omorder where ORDERDATE = to_date('" + dt + "', 'yyyy-mm-dd'))";
+                    "and ( n.UserNo  = 'EB237003' OR  n.UserNo  = 'EB198004' ) ";
                 DataTable tbDD = ltDll.ltClass.SelectFromMes(sqlDD);
                 if (tbDD.Rows.Count > 0)
                 {
                     for (int i = 0; i < tbDD.Rows.Count; i++)
                     {
                         string userNo = tbDD.Rows[i]["UserNo"].ToString();
-                        string ddContent = "提醒您今天還沒訂餐哦，請盡快點選今天午餐，謝謝！";
-                        string ddTitle = "訂餐提醒";
+                        string userCName = tbDD.Rows[i]["CName"].ToString();
+                        string ddContent = $@"> ### 🔔 訂餐提醒 
+> ___ 
+> #### {userCName} 您好，提醒您今天還沒訂餐，請盡快點進行訂餐，謝謝 
+> **[點擊進入點餐](https://mis.lightion.com.cn:89/T100/Edward/OrderMeal/Login.aspx)** ";
+                        string ddTitle = $"{dt}_訂餐提醒";
+
                         try
                         {
-                            ltDll.ltClass.SendDDByActionCard(userNo, ddContent, ddTitle, "Click", "https://mis.lightion.com.cn:89/");
+                            ltDll.ltClass.SendDDByMarkdown(userNo, ddTitle, ddContent);
                         }
                         catch (Exception ex)
                         {

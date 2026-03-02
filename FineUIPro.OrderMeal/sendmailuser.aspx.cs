@@ -93,32 +93,39 @@ namespace FineUIPro.OrderMeal
                         //body.Append("<span>2) 當日忘記訂餐者，請勿佔用他人的名額，以避免主餐不夠 ~ ~ 但開放於12:35分後可選用自助餐。</span><br/><br/>");
                         //body.Append("<span>3) 不用餐的同仁，請勾選 [ 不訂餐 ]。</span><br/><br/>");
                         //body.Append("<span color='red'>4) 當日若已知 : 無法用餐、需外出、出差或請假者，請務必於8:40分前取消訂餐，節省資源不造成餐食之浪費。謝謝配合！！</span><br/><br/>");
-                        ltDll.ltClass.SendEmail("訂餐提醒", tb.Rows[i]["mail"].ToString(), "", "", body.ToString());
+                        //ltDll.ltClass.SendEmail("訂餐提醒", tb.Rows[i]["mail"].ToString(), "", "", body.ToString());
+                        ltDll.ltClass.SendEmail("訂餐提醒", "EDWARDLIN@ELYTONE.COM", "", "", body.ToString());
                     }
                 }
 
                 // === DingTalk (釘釘) 通知 ===
                 // 查詢已啟用 DingTalk 通知 (Type='2', isEnable=1) 且尚未訂餐的使用者
-                string sqlDD = "select n.UserNo from OrderMealNotice n " +
+                string sqlDD = "select n.UserNo,b.username AS CName from OrderMealNotice n " +
                     "inner join ltusers u on u.luser = n.UserNo " +
                     "inner join tblusruserbasis_view b on b.userno = n.UserNo " +
                     "where n.Type = '2' and n.isEnable = 1 " +
                     "and b.issuestate = 2 " +
                     "and u.LPROGRAM = 'OrderMeal' " +
-                    "and n.UserNo not like 'LB%' " +
-                    "and n.UserNo not in (select luser from ltusers where lprogram='OrderMeal' and LB1=1) " +
-                    "and n.UserNo not in (select userno from omorder where ORDERDATE = to_date('" + dt + "', 'yyyy-mm-dd'))";
+                    //"and n.UserNo not like 'LB%' " +                 
+                    //"and n.UserNo not in (select luser from ltusers where lprogram='OrderMeal' and LB1=1) " +
+                    //"and n.UserNo not in (select userno from omorder where ORDERDATE = to_date('" + dt + "', 'yyyy-mm-dd'))";
+                    "and ( n.UserNo  = 'EB237003' OR  n.UserNo  = 'EB198004' ) ";
                 DataTable tbDD = ltDll.ltClass.SelectFromMes(sqlDD);
                 if (tbDD.Rows.Count > 0)
                 {
                     for (int i = 0; i < tbDD.Rows.Count; i++)
                     {
                         string userNo = tbDD.Rows[i]["UserNo"].ToString();
-                        string ddContent = "提醒您 " + dt + " 午餐尚未訂餐，請盡快進行訂餐，謝謝！";
+                        string userCName = tbDD.Rows[i]["CName"].ToString();
+                        string ddContent = $@"> ### 🔔 訂餐提醒 
+> ___ 
+> #### {userCName} 提醒您 {dt} 午餐尚未訂餐，請盡快進行訂餐，謝謝
+> **[點擊進入點餐](https://mis.lightion.com.cn:89/T100/Edward/OrderMeal/Login.aspx)** ";
                         string ddTitle = "訂餐提醒";
+                       
                         try
                         {
-                            ltDll.ltClass.SendDDByActionCard(userNo, ddContent, ddTitle, "Click", "https://mis.lightion.com.cn:89/");
+                            ltDll.ltClass.SendDDByMarkdown(userNo, ddTitle, ddContent);
                         }
                         catch (Exception ex)
                         {

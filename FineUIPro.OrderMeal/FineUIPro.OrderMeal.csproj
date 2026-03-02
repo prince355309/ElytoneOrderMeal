@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FineUIPro.OrderMeal</RootNamespace>
     <AssemblyName>FineUIPro.OrderMeal</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
     <FileUpgradeFlags>
@@ -48,13 +48,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FineUIPro, Version=3.6.0.0, Culture=neutral, PublicKeyToken=9cbe753c029f291a, processorArchitecture=MSIL">
+    <Reference Include="FineUIPro, Version=8.0.0.0, Culture=neutral, PublicKeyToken=9cbe753c029f291a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\2023\FineUIPro.dll</HintPath>
+      <HintPath>..\..\..\Users\EDWARDLIN\Desktop\Edward\FineUI\FineUIPro_v9.1_custom_东莞光顺电子有限公司\FineUIPro.dll</HintPath>
     </Reference>
     <Reference Include="ltDll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\2023\ltDll.dll</HintPath>
+      <HintPath>..\..\..\Users\EDWARDLIN\Desktop\Edward\OtherDll\260128\ltDll.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

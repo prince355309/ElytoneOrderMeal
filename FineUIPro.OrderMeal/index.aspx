@@ -714,6 +714,7 @@
             let weekDates = [];
             let mealsData = {};
             let ordersData = {};
+            const orderWindowConfig = <%= orderWindowConfigJson %>;
             let mealTypes = [
                 { id: 'buffet', name: '本日自助餐', nameEn: 'Buffet', type: '自助餐', icon: '🍱', desc: '' },
                 { id: 'simple', name: '精選簡餐', nameEn: 'Set Meal', type: '簡餐', icon: '🍛', desc: '' },
@@ -819,8 +820,36 @@
                 return normalized;
             }
 
-            function getLatestOrderDate() {
-                const latest = normalizeDate(new Date());
+            function getEarliestOrderDate(now = new Date()) {
+                const earliest = normalizeDate(now);
+                const todayCutoff = new Date(earliest);
+                todayCutoff.setHours(9, 0, 0, 0);
+
+                if (now >= todayCutoff) {
+                    earliest.setDate(earliest.getDate() + 1);
+                }
+
+                return earliest;
+            }
+
+            function getSpecialOrderEndDate(now = new Date()) {
+                if (!orderWindowConfig.enableSpecialOrderWindow) return null;
+
+                const specialStart = normalizeDate(orderWindowConfig.specialOrderWindowStartDate);
+                const specialEnd = normalizeDate(orderWindowConfig.specialOrderWindowEndDate);
+                if (normalizeDate(now) < specialStart) return null;
+
+                const earliest = getEarliestOrderDate(now);
+                if (earliest > specialEnd) return null;
+
+                return specialEnd;
+            }
+
+            function getLatestOrderDate(now = new Date()) {
+                const specialEnd = getSpecialOrderEndDate(now);
+                if (specialEnd) return specialEnd;
+
+                const latest = normalizeDate(now);
                 let workdayCount = 0;
 
                 while (workdayCount < 2) {
@@ -837,21 +866,17 @@
 
             function isDateOrderable(date) {
                 const now = new Date();
-                const today = normalizeDate(now);
+                const earliest = getEarliestOrderDate(now);
                 const selected = normalizeDate(date);
+                if (selected < earliest) return false;
+
+                const specialEnd = getSpecialOrderEndDate(now);
+                if (specialEnd) return selected <= specialEnd;
 
                 const dayOfWeek = selected.getDay();
                 if (dayOfWeek === 0 || dayOfWeek === 6) return false;
 
-                if (selected < today) return false;
-
-                if (selected.getTime() === today.getTime()) {
-                    const todayCutoff = new Date(today);
-                    todayCutoff.setHours(9, 0, 0, 0);
-                    return now < todayCutoff;
-                }
-
-                return selected <= getLatestOrderDate();
+                return selected <= getLatestOrderDate(now);
             }
 
             function renderDateTabs() {
