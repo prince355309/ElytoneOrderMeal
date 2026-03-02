@@ -139,6 +139,83 @@ namespace FineUIPro.OrderMeal
             return ltDll.ltClass.SessionRead("OrderMeal", "USERNO");
         }
 
+        private static bool CanEditLunchUser(string userNo)
+        {
+            if (string.IsNullOrEmpty(userNo))
+            {
+                return false;
+            }
+
+            string sql = "select * from ltusers,tblusruserbasis where LA1=1 and LUSER='" + EscapeSqlLiteral(userNo) + "' and luser=userno(+) and lprogram='OrderMeal'";
+            DataTable dt = ltDll.ltClass.SelectFromMes(sql);
+            return dt.Rows.Count > 0;
+        }
+
+        private static string EscapeSqlLiteral(string value)
+        {
+            return (value ?? string.Empty).Replace("'", "''");
+        }
+
+        private static bool TrySaveMenuRecord(string lunchDate, string lunchType, string lunchName, out string message)
+        {
+            DateTime parsedLunchDate = DateTime.Parse(lunchDate);
+            string normalizedLunchDate = parsedLunchDate.ToString("yyyy-MM-dd");
+            string normalizedLunchType = (lunchType ?? string.Empty).Trim();
+            string normalizedLunchName = lunchName ?? string.Empty;
+            DataTable existingMenu = omlunch(normalizedLunchDate, normalizedLunchType);
+
+            if (string.IsNullOrWhiteSpace(normalizedLunchName))
+            {
+                if (existingMenu.Rows.Count > 0)
+                {
+                    string deleteSql = string.Format("delete from omlunch where lunchid='{0}'",
+                        EscapeSqlLiteral(existingMenu.Rows[0]["lunchid"].ToString()));
+                    if (!ltDll.ltClass.ExecuteToMes(deleteSql))
+                    {
+                        message = "資料庫寫入失敗";
+                        return false;
+                    }
+
+                    message = "修改成功！";
+                    return true;
+                }
+
+                message = "請輸入菜單描述！";
+                return false;
+            }
+
+            string escapedLunchType = EscapeSqlLiteral(normalizedLunchType);
+            string escapedLunchName = EscapeSqlLiteral(normalizedLunchName);
+
+            if (existingMenu.Rows.Count > 0)
+            {
+                string updateSql = string.Format(
+                    "update omlunch set LUNCHNAME='{0}' where LUNCHDATE=to_date('{1}','yyyy-mm-dd') and LUNCHTYPE='{2}'",
+                    escapedLunchName, normalizedLunchDate, escapedLunchType);
+                if (!ltDll.ltClass.ExecuteToMes(updateSql))
+                {
+                    message = "資料庫寫入失敗";
+                    return false;
+                }
+
+                message = "修改成功！";
+                return true;
+            }
+
+            string maxId = ltDll.ltClass.SelectFromMesFirstRow("select nvl(max(lunchid)+1,1) from omlunch");
+            string insertSql = string.Format(
+                "insert into omlunch (LUNCHDATE,LUNCHTYPE,LUNCHNAME,LUNCHID) values (to_date('{0}', 'yyyy-mm-dd'),'{1}','{2}',{3})",
+                normalizedLunchDate, escapedLunchType, escapedLunchName, maxId);
+            if (!ltDll.ltClass.ExecuteToMes(insertSql))
+            {
+                message = "資料庫寫入失敗";
+                return false;
+            }
+
+            message = "添加成功！";
+            return true;
+        }
+
         private static DateTime GetMondayForAdmin(DateTime dt)
         {
             int dayOfWeek = index.DayOfWeek(dt);
@@ -412,6 +489,28 @@ namespace FineUIPro.OrderMeal
             catch (Exception ex)
             {
                 return new { success = false, lunchName = "", message = ex.Message };
+            }
+        }
+
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public static object SaveMenuData(string lunchDate, string lunchType, string lunchName)
+        {
+            try
+            {
+                string userNo = GetCurrentUserNo();
+                if (!CanEditLunchUser(userNo))
+                {
+                    return new { success = false, message = "無權限執行此操作" };
+                }
+
+                string message;
+                bool success = TrySaveMenuRecord(lunchDate, lunchType, lunchName, out message);
+                return new { success = success, message = message };
+            }
+            catch (Exception ex)
+            {
+                return new { success = false, message = "儲存失敗: " + ex.Message };
             }
         }
 
@@ -1692,16 +1791,7 @@ namespace FineUIPro.OrderMeal
 
         private bool addlunchuser()
         {
-            string sql = "select * from ltusers,tblusruserbasis where LA1=1 and LUSER='" + userno + "' and luser=userno(+) and lprogram='OrderMeal'";
-            DataTable dt = ltDll.ltClass.SelectFromMes(sql);
-            if (dt.Rows.Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return CanEditLunchUser(userno);
         }
         //private bool morelunchuser()
         //{
@@ -1991,46 +2081,15 @@ namespace FineUIPro.OrderMeal
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            string lunchdate = dpdate.Text;
-            string lunchtype = ddltype.SelectedValue;
-            string lunchname = taname.Text;
-            DataTable dt2 = omlunch(lunchdate, lunchtype);
-            if (taname.Text == string.Empty)
+            string message;
+            bool success = TrySaveMenuRecord(dpdate.Text, ddltype.SelectedValue, taname.Text, out message);
+
+            if (success && !string.IsNullOrWhiteSpace(taname.Text))
             {
-                if (dt2.Rows.Count > 0)
-                {
-                    string sql2 = string.Format("delete from omlunch where lunchid='{0}'", dt2.Rows[0]["lunchid"].ToString());
-                    if (ltDll.ltClass.ExecuteToMes(sql2) == true)
-                    {
-                        ShowNotify("修改成功！", MessageBoxIcon.Success);
-                    }
-                }
-                else
-                {
-                    ShowNotify("請輸入菜單描述！", MessageBoxIcon.Success);
-                }
+                DatePicker1.SelectedDate = DateTime.Parse(dpdate.Text);
             }
-            else
-            {
-                if (dt2.Rows.Count > 0)
-                {
-                    string sql2 = string.Format("update omlunch set LUNCHNAME='{0}' where LUNCHDATE=to_date('{1}','yyyy-mm-dd') and LUNCHTYPE='{2}'", lunchname, lunchdate, lunchtype);
-                    if (ltDll.ltClass.ExecuteToMes(sql2) == true)
-                    {
-                        ShowNotify("修改成功！", MessageBoxIcon.Success);
-                    }
-                }
-                else
-                {
-                    string maxid = ltDll.ltClass.SelectFromMesFirstRow("select nvl(max(lunchid)+1,1) from omlunch");
-                    string sql3 = string.Format("insert into omlunch (LUNCHDATE,LUNCHTYPE,LUNCHNAME,LUNCHID) values (to_date('{0}', 'yyyy-mm-dd'),'{1}','{2}',{3})", lunchdate, lunchtype, lunchname, maxid);
-                    if (ltDll.ltClass.ExecuteToMes(sql3) == true)
-                    {
-                        ShowNotify("添加成功！", MessageBoxIcon.Success);
-                    }
-                }
-                DatePicker1.SelectedDate = DateTime.Parse(lunchdate);
-            }
+
+            ShowNotify(message, MessageBoxIcon.Success);
 
         }
         protected void dpdate_TextChanged(object sender, EventArgs e)

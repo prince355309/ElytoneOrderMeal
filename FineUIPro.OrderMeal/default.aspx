@@ -8,17 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>團膳管理系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { DEFAULT: '#e78232', light: '#f5a862', dark: '#c66a1f', 50: '#fef9f3', 100: '#fdf0e3', 200: '#fbe0c7', 500: '#e78232', 600: '#c66a1f', 700: '#a5571a' },
-                        success: { DEFAULT: '#2E7D32', light: '#4CAF50' }
-                    }
-                }
-            }
-        }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#e78232', light: '#f5a862', dark: '#c66a1f', 50: '#fef9f3', 100: '#fdf0e3', 200: '#fbe0c7', 500: '#e78232', 600: '#c66a1f', 700: '#a5571a' },
+                        success: { DEFAULT: '#2E7D32', light: '#4CAF50' }
+                    }
+                }
+            }
+        }
     </script>
     <style>
         body {
@@ -869,7 +869,7 @@
                         onclick="closeMenuEditModal()">
                         取消</button>
                     <button type="button" class="admin-btn admin-btn-primary" onclick="submitMenuEdit()">
-                        💾
+                        💾
                                     保存</button>
                 </div>
             </div>
@@ -975,7 +975,7 @@
                         </div>
                         <div class="ml-3">
                             <p class="text-sm text-primary-700">
-                                點餐需於<strong>前一日 16:00
+                                點餐需於<strong>前一日 16:00
                                                     前</strong>完成選訂，取消訂餐可於<strong>當天 08:40 前</strong>取消。請節省資源，避免餐食浪費！
                             </p>
                         </div>
@@ -1001,7 +1001,7 @@
                                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
                                     </path>
                                 </svg>
-                                本週登記概況
+                                本週登記概況
                             </h3>
                             <div id="weeklySummaryDesktop" class="space-y-3"></div>
                             <button type="button" onclick="saveAllOrders()"
@@ -1137,7 +1137,7 @@
                                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
                             </path>
                         </svg>
-                        通知設定
+                        通知設定
                     </h3>
                     <button type="button" class="notice-close-btn" onclick="closeNoticeModal()">✕</button>
                 </div>
@@ -1226,7 +1226,7 @@
             </div>
             <div class="p-6">
                 <div class="img-placeholder rounded-xl overflow-hidden mb-4" style="height: 200px" id="modalImage">
-                    🍱
+                    🍱
                 </div>
                 <div class="bg-primary-50 rounded-lg p-4 mb-4">
                     <div class="flex items-center space-x-2 text-primary-700">
@@ -1247,148 +1247,156 @@
         </div>
     </div>
 
-    <script>
-        // ===== Notice Settings Functions =====
-        function openNoticeModal() {
-            document.getElementById('noticeModal').classList.add('active');
-            loadNoticeSettings();
-        }
-        function closeNoticeModal(e) {
-            if (e && e.target && e.target.id !== 'noticeModal') return;
-            document.getElementById('noticeModal').classList.remove('active');
-        }
-        function updateNoticeItemStyle(type, checked) {
-            var itemId = 'noticeItem' + (type === 'Mail' ? 'Mail' : 'DingTalk');
-            var el = document.getElementById(itemId);
-            if (el) { if (checked) el.classList.add('enabled'); else el.classList.remove('enabled'); }
-        }
-        function loadNoticeSettings() {
-            PageMethods.GetNoticeSettings(function (result) {
-                if (result && result.success) {
-                    document.getElementById('toggleMail').checked = result.mailEnabled;
-                    document.getElementById('toggleDingTalk').checked = result.dingTalkEnabled;
-                    updateNoticeItemStyle('Mail', result.mailEnabled);
-                    updateNoticeItemStyle('DingTalk', result.dingTalkEnabled);
-                }
-            }, function (err) { console.error('GetNoticeSettings error:', err); });
-        }
-        function saveNoticeSettings() {
-            var mailEnabled = document.getElementById('toggleMail').checked ? 1 : 0;
-            var dingTalkEnabled = document.getElementById('toggleDingTalk').checked ? 1 : 0;
-            PageMethods.SaveNoticeSettings(mailEnabled, dingTalkEnabled, function (result) {
-                if (result && result.success) { showToast('通知設定已儲存！'); closeNoticeModal(); }
-                else showToast(result.message || '儲存失敗', false);
-            }, function (err) { showToast('發生錯誤，請稍後再試', false); });
-        }
-
-        // === Global state (same as index.aspx) ===
+    <script>
+        // ===== Notice Settings Functions =====
+        function openNoticeModal() {
+            document.getElementById('noticeModal').classList.add('active');
+            loadNoticeSettings();
+        }
+        function closeNoticeModal(e) {
+            if (e && e.target && e.target.id !== 'noticeModal') return;
+            document.getElementById('noticeModal').classList.remove('active');
+        }
+        function updateNoticeItemStyle(type, checked) {
+            var itemId = 'noticeItem' + (type === 'Mail' ? 'Mail' : 'DingTalk');
+            var el = document.getElementById(itemId);
+            if (el) { if (checked) el.classList.add('enabled'); else el.classList.remove('enabled'); }
+        }
+        function loadNoticeSettings() {
+            PageMethods.GetNoticeSettings(function (result) {
+                if (result && result.success) {
+                    document.getElementById('toggleMail').checked = result.mailEnabled;
+                    document.getElementById('toggleDingTalk').checked = result.dingTalkEnabled;
+                    updateNoticeItemStyle('Mail', result.mailEnabled);
+                    updateNoticeItemStyle('DingTalk', result.dingTalkEnabled);
+                }
+            }, function (err) { console.error('GetNoticeSettings error:', err); });
+        }
+        function saveNoticeSettings() {
+            var mailEnabled = document.getElementById('toggleMail').checked ? 1 : 0;
+            var dingTalkEnabled = document.getElementById('toggleDingTalk').checked ? 1 : 0;
+            PageMethods.SaveNoticeSettings(mailEnabled, dingTalkEnabled, function (result) {
+                if (result && result.success) { showToast('通知設定已儲存！'); closeNoticeModal(); }
+                else showToast(result.message || '儲存失敗', false);
+            }, function (err) { showToast('發生錯誤，請稍後再試', false); });
+        }
+
+        // === Global state (same as index.aspx) ===
         let currentWeekOffset = 0, selectedDateIndex = 0, weekDates = [], mealsData = {}, ordersData = {};
         const orderWindowConfig = <%= orderWindowConfigJson %>;
-        let mealTypes = [
-            { id: 'buffet', name: '本日自助餐', nameEn: 'Buffet', type: '自助餐', icon: '🍱', desc: '' },
-            { id: 'simple', name: '精選簡餐', nameEn: 'Set Meal', type: '簡餐', icon: '🍛', desc: '' },
-            { id: 'noodles', name: '精選麵食', nameEn: 'Noodles', type: '麵食', icon: '🍜', desc: '' },
-            { id: 'light', name: '輕食餐', nameEn: 'Light Meal', type: '輕食餐', icon: '🥗', desc: '' },
-            { id: 'vegetarian', name: '健康素食', nameEn: 'Vegetarian', type: '素食', icon: '🥬', desc: '素食套餐 (全素/蛋奶素)' },
-            { id: 'none', name: '今日不訂餐', nameEn: 'Skip', type: '不訂餐', icon: '🚫', desc: '登記不訂餐' }
-        ];
-
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeWeekDates(); loadInitialData();
-        });
-
-        // === Sidebar ===
-        function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
-        function closeSidebar() { document.body.classList.remove('sidebar-open'); }
-
-        // === Section switching ===
-        var reportUrls = { report1: 'report1.aspx', report2: 'report2.aspx', report3: 'report3.aspx', report4: 'report4.aspx', report5: 'report5.aspx' };
-        var loadedReports = {};
-        function showSection(name, btn) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            if (name === 'menu') { document.getElementById('sectionMenu').classList.add('active'); }
-            else {
-                var capName = name.charAt(0).toUpperCase() + name.slice(1);
-                var sec = document.getElementById('section' + capName);
-                if (sec) { sec.classList.add('active'); if (!loadedReports[name] && reportUrls[name]) { document.getElementById('iframe' + capName).src = reportUrls[name]; loadedReports[name] = true; } }
-            }
-            if (window.innerWidth < 1024) closeSidebar();
-        }
-
-        // === Admin actions ===
-        function openMenuEditWindow() {
-            // Only set default date if not already populated by Page_Load
-            var menuDateEl = document.getElementById('menuDate');
-            if (!menuDateEl.value) {
-                var d = new Date(); d.setDate(d.getDate() + 4);
-                menuDateEl.value = formatDate(d);
-                document.getElementById('menuType').value = '自助餐';
-            }
-            document.getElementById('menuEditModal').classList.add('active');
-            // Refresh data from DB for current date/type
-            fetchMenuData();
-        }
-        function closeMenuEditModal() { document.getElementById('menuEditModal').classList.remove('active'); }
-
-        // Fetch existing menu data from DB when date/type changes
-        function fetchMenuData() {
-            var dateVal = document.getElementById('menuDate').value;
-            var typeVal = document.getElementById('menuType').value;
-            if (!dateVal) return;
-            PageMethods.GetMenuData(dateVal, typeVal, function (result) {
-                if (result && result.success) {
-                    document.getElementById('menuDesc').value = result.lunchName || '';
-                }
-            }, function (err) {
-                console.error('GetMenuData error:', err);
-            });
-        }
-
-        // Wire up change events
-        document.addEventListener('DOMContentLoaded', function () {
-            var menuDateEl = document.getElementById('menuDate');
-            var menuTypeEl = document.getElementById('menuType');
-            if (menuDateEl) menuDateEl.addEventListener('change', fetchMenuData);
-            if (menuTypeEl) menuTypeEl.addEventListener('change', fetchMenuData);
-        });
-
-        function submitMenuEdit() {
-            var dateVal = document.getElementById('menuDate').value;
-            var typeVal = document.getElementById('menuType').value;
-            var descVal = document.getElementById('menuDesc').value;
-            if (!dateVal) { alert('請選擇日期'); return; }
-            // Sync values to hidden FineUI controls then trigger save
-            var fDpdate = F && F('<%= dpdate.ClientID %>'); if (fDpdate) fDpdate.setValue(dateVal);
-                var fDdltype = F && F('<%= ddltype.ClientID %>'); if (fDdltype) fDdltype.setValue(typeVal);
-                var fTaname = F && F('<%= taname.ClientID %>'); if (fTaname) fTaname.setValue(descVal);
-        // Trigger server-side save
-        document.querySelector('[id$="btnSave"]').click();
-        closeMenuEditModal();
-    }
-
-    function doSendNextWeek() { document.querySelector('[id$="btnSend"]').click(); closeSidebar(); }
-
-    function showDateSendUI() {
-        document.getElementById('dateSendModal').classList.add('active');
-        closeSidebar();
-    }
-    function closeDateSendModal() { document.getElementById('dateSendModal').classList.remove('active'); }
-    function submitDateSend() {
-        var startVal = document.getElementById('sendStartDate').value;
-        var endVal = document.getElementById('sendEndDate').value;
-        if (!startVal || !endVal) { alert('請選擇起始和結束日期'); return; }
-        if (endVal < startVal) { alert('結束日期應大於開始日期'); return; }
-        // Sync to hidden FineUI DatePickers then trigger send
-        var fDp2 = F && F('<%= DatePicker2.ClientID %>'); if (fDp2) fDp2.setValue(startVal);
-                var fDp3 = F && F('<%= DatePicker3.ClientID %>'); if (fDp3) fDp3.setValue(endVal);
-                document.querySelector('[id$="btnDateSend"]').click();
-                closeDateSendModal();
-            }
-
-            // === Date/Week logic (identical to index.aspx) ===
-            function changeWeek(dir) { currentWeekOffset += dir; initializeWeekDates(); selectedDateIndex = 0; loadWeekData(); }
+        let mealTypes = [
+            { id: 'buffet', name: '本日自助餐', nameEn: 'Buffet', type: '自助餐', icon: '🍱', desc: '' },
+            { id: 'simple', name: '精選簡餐', nameEn: 'Set Meal', type: '簡餐', icon: '🍛', desc: '' },
+            { id: 'noodles', name: '精選麵食', nameEn: 'Noodles', type: '麵食', icon: '🍜', desc: '' },
+            { id: 'light', name: '輕食餐', nameEn: 'Light Meal', type: '輕食餐', icon: '🥗', desc: '' },
+            { id: 'vegetarian', name: '健康素食', nameEn: 'Vegetarian', type: '素食', icon: '🥬', desc: '素食套餐 (全素/蛋奶素)' },
+            { id: 'none', name: '今日不訂餐', nameEn: 'Skip', type: '不訂餐', icon: '🚫', desc: '登記不訂餐' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeWeekDates(); loadInitialData();
+        });
+
+        // === Sidebar ===
+        function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
+        function closeSidebar() { document.body.classList.remove('sidebar-open'); }
+
+        // === Section switching ===
+        var reportUrls = { report1: 'report1.aspx', report2: 'report2.aspx', report3: 'report3.aspx', report4: 'report4.aspx', report5: 'report5.aspx' };
+        var loadedReports = {};
+        function showSection(name, btn) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            if (name === 'menu') { document.getElementById('sectionMenu').classList.add('active'); }
+            else {
+                var capName = name.charAt(0).toUpperCase() + name.slice(1);
+                var sec = document.getElementById('section' + capName);
+                if (sec) { sec.classList.add('active'); if (!loadedReports[name] && reportUrls[name]) { document.getElementById('iframe' + capName).src = reportUrls[name]; loadedReports[name] = true; } }
+            }
+            if (window.innerWidth < 1024) closeSidebar();
+        }
+
+        // === Admin actions ===
+        function openMenuEditWindow() {
+            // Only set default date if not already populated by Page_Load
+            var menuDateEl = document.getElementById('menuDate');
+            if (!menuDateEl.value) {
+                var d = new Date(); d.setDate(d.getDate() + 4);
+                menuDateEl.value = formatDate(d);
+                document.getElementById('menuType').value = '自助餐';
+            }
+            document.getElementById('menuEditModal').classList.add('active');
+            // Refresh data from DB for current date/type
+            fetchMenuData();
+        }
+        function closeMenuEditModal() { document.getElementById('menuEditModal').classList.remove('active'); }
+
+        // Fetch existing menu data from DB when date/type changes
+        function fetchMenuData() {
+            var dateVal = document.getElementById('menuDate').value;
+            var typeVal = document.getElementById('menuType').value;
+            if (!dateVal) return;
+            PageMethods.GetMenuData(dateVal, typeVal, function (result) {
+                if (result && result.success) {
+                    document.getElementById('menuDesc').value = result.lunchName || '';
+                }
+            }, function (err) {
+                console.error('GetMenuData error:', err);
+            });
+        }
+
+        // Wire up change events
+        document.addEventListener('DOMContentLoaded', function () {
+            var menuDateEl = document.getElementById('menuDate');
+            var menuTypeEl = document.getElementById('menuType');
+            if (menuDateEl) menuDateEl.addEventListener('change', fetchMenuData);
+            if (menuTypeEl) menuTypeEl.addEventListener('change', fetchMenuData);
+        });
+
+        function submitMenuEdit() {
+            var dateVal = document.getElementById('menuDate').value;
+            var typeVal = document.getElementById('menuType').value;
+            var descVal = document.getElementById('menuDesc').value;
+            if (!dateVal) { alert('請選擇日期'); return; }
+            showLoading(true);
+            PageMethods.SaveMenuData(dateVal, typeVal, descVal, function (result) {
+                showLoading(false);
+                if (result && result.success) {
+                    showToast(result.message || '儲存成功！');
+                    closeMenuEditModal();
+                    fetchMenuData();
+                    loadWeekData();
+                } else {
+                    showToast((result && result.message) || '儲存失敗', false);
+                }
+            }, function (err) {
+                showLoading(false);
+                showToast('發生錯誤，請稍後再試', false);
+            });
+        }
+
+    function doSendNextWeek() { document.querySelector('[id$="btnSend"]').click(); closeSidebar(); }
+
+    function showDateSendUI() {
+        document.getElementById('dateSendModal').classList.add('active');
+        closeSidebar();
+    }
+    function closeDateSendModal() { document.getElementById('dateSendModal').classList.remove('active'); }
+    function submitDateSend() {
+        var startVal = document.getElementById('sendStartDate').value;
+        var endVal = document.getElementById('sendEndDate').value;
+        if (!startVal || !endVal) { alert('請選擇起始和結束日期'); return; }
+        if (endVal < startVal) { alert('結束日期應大於開始日期'); return; }
+        // Sync to hidden FineUI DatePickers then trigger send
+        var fDp2 = F && F('<%= DatePicker2.ClientID %>'); if (fDp2) fDp2.setValue(startVal);
+                var fDp3 = F && F('<%= DatePicker3.ClientID %>'); if (fDp3) fDp3.setValue(endVal);
+                document.querySelector('[id$="btnDateSend"]').click();
+                closeDateSendModal();
+            }
+
+            // === Date/Week logic (identical to index.aspx) ===
+            function changeWeek(dir) { currentWeekOffset += dir; initializeWeekDates(); selectedDateIndex = 0; loadWeekData(); }
             function formatDate(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
             function normalizeDate(date) {
                 var normalized = new Date(date);
@@ -1440,78 +1448,78 @@
                 if (dayOfWeek === 0 || dayOfWeek === 6) return false;
                 return selected <= getLatestOrderDate(now);
             }
-            function initializeWeekDates() {
-                var today = new Date(), dow = today.getDay(), monday = new Date(today);
-                monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1) + currentWeekOffset * 7);
-                weekDates = []; var dayNames = ['週一', '週二', '週三', '週四', '週五'];
-                for (var i = 0; i < 5; i++) { var d = new Date(monday); d.setDate(monday.getDate() + i); weekDates.push({ date: d, dateStr: formatDate(d), display: (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + dayNames[i], shortDisplay: (d.getMonth() + 1) + '/' + d.getDate(), dayName: dayNames[i] }); }
-                if (currentWeekOffset === 0) { var ts = formatDate(today); selectedDateIndex = weekDates.findIndex(d => d.dateStr === ts); if (selectedDateIndex === -1) selectedDateIndex = 0; } else selectedDateIndex = 0;
-                renderDateTabs();
-            }
-            function renderDateTabs() {
-                document.getElementById('dateTabs').innerHTML = weekDates.map((d, i) =>
-                    `<button type="button" class="date-tab flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all duration-300 ${i === selectedDateIndex ? 'active' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}" onclick="selectDate(${i})"><span class="hidden sm:inline">${d.display}</span><span class="sm:hidden">${d.shortDisplay} ${d.dayName}</span></button>`
-                ).join('');
-            }
-            function selectDate(i) { selectedDateIndex = i; renderDateTabs(); renderMealCards(); updateWeeklySummary(); }
-            function loadInitialData() {
-                var wd = document.getElementById('<%= hfWeekData.ClientID %>').value;
-                var od = document.getElementById('<%= hfOrderData.ClientID %>').value;
-          try { if (wd) mealsData = JSON.parse(wd); if (od) ordersData = JSON.parse(od); } catch (e) { }
-          renderMealCards(); updateWeeklySummary();
-      }
-      function loadWeekData() {
-          showLoading(true);
-          PageMethods.LoadWeekData(weekDates[0].dateStr, weekDates[4].dateStr, function (r) {
-              showLoading(false);
-              if (r.success) { try { if (r.mealsData) mealsData = JSON.parse(r.mealsData); if (r.ordersData) ordersData = JSON.parse(r.ordersData); } catch (e) { } renderMealCards(); updateWeeklySummary(); }
-              else showToast(r.message || '載入失敗', false);
-          }, function (e) { showLoading(false); showToast('發生錯誤', false); });
-      }
-
-      // === Render Meal Cards (same as index.aspx + quantity stepper) ===
-      function renderMealCards() {
-          var container = document.getElementById('mealCards');
+            function initializeWeekDates() {
+                var today = new Date(), dow = today.getDay(), monday = new Date(today);
+                monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1) + currentWeekOffset * 7);
+                weekDates = []; var dayNames = ['週一', '週二', '週三', '週四', '週五'];
+                for (var i = 0; i < 5; i++) { var d = new Date(monday); d.setDate(monday.getDate() + i); weekDates.push({ date: d, dateStr: formatDate(d), display: (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + dayNames[i], shortDisplay: (d.getMonth() + 1) + '/' + d.getDate(), dayName: dayNames[i] }); }
+                if (currentWeekOffset === 0) { var ts = formatDate(today); selectedDateIndex = weekDates.findIndex(d => d.dateStr === ts); if (selectedDateIndex === -1) selectedDateIndex = 0; } else selectedDateIndex = 0;
+                renderDateTabs();
+            }
+            function renderDateTabs() {
+                document.getElementById('dateTabs').innerHTML = weekDates.map((d, i) =>
+                    `<button type="button" class="date-tab flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all duration-300 ${i === selectedDateIndex ? 'active' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}" onclick="selectDate(${i})"><span class="hidden sm:inline">${d.display}</span><span class="sm:hidden">${d.shortDisplay} ${d.dayName}</span></button>`
+                ).join('');
+            }
+            function selectDate(i) { selectedDateIndex = i; renderDateTabs(); renderMealCards(); updateWeeklySummary(); }
+            function loadInitialData() {
+                var wd = document.getElementById('<%= hfWeekData.ClientID %>').value;
+                var od = document.getElementById('<%= hfOrderData.ClientID %>').value;
+          try { if (wd) mealsData = JSON.parse(wd); if (od) ordersData = JSON.parse(od); } catch (e) { }
+          renderMealCards(); updateWeeklySummary();
+      }
+      function loadWeekData() {
+          showLoading(true);
+          PageMethods.LoadWeekData(weekDates[0].dateStr, weekDates[4].dateStr, function (r) {
+              showLoading(false);
+              if (r.success) { try { if (r.mealsData) mealsData = JSON.parse(r.mealsData); if (r.ordersData) ordersData = JSON.parse(r.ordersData); } catch (e) { } renderMealCards(); updateWeeklySummary(); }
+              else showToast(r.message || '載入失敗', false);
+          }, function (e) { showLoading(false); showToast('發生錯誤', false); });
+      }
+
+      // === Render Meal Cards (same as index.aspx + quantity stepper) ===
+      function renderMealCards() {
+          var container = document.getElementById('mealCards');
           var dateStr = weekDates[selectedDateIndex].dateStr;
           var dayMeals = mealsData[dateStr] || {}, dayOrder = ordersData[dateStr] || { lunchId: null, type: null };
           var canOrder = isDateOrderable(weekDates[selectedDateIndex].date);
-          var html = '';
-          mealTypes.forEach(meal => {
-              var info = dayMeals[meal.type] || {};
-              var avail = info.available !== false && (meal.type === '不訂餐' || meal.type === '素食' || info.name);
-              var isSel = dayOrder.type === meal.type || (meal.type === '不訂餐' && dayOrder.lunchId === '0' && dayOrder.type === '不訂餐');
-              var mealName = info.name || meal.desc || '';
-              var clickable = avail && canOrder;
-              var orderNum = parseInt(dayOrder.orderNum) || 1;
-              if (meal.type === '不訂餐' || meal.type === '素食' || info.name) {
-                  // Quantity stepper HTML (admin feature, not on 不訂餐)
-                  var qtyHtml = '';
-                  if (meal.type !== '不訂餐' && isSel) {
-                      qtyHtml = `<div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100"><span class="text-xs text-gray-500 font-medium">訂餐份數</span><div class="qty-stepper"><button type="button" onclick="event.stopPropagation();changeQty(-1)">−</button><span class="qty-val" id="qtyVal">${orderNum}</span><button type="button" onclick="event.stopPropagation();changeQty(1)">+</button></div></div>`;
-                  }
-                  html += `<div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden border-2 transition-all duration-300 cursor-pointer ${isSel ? 'meal-selected border-success' : 'border-transparent'} ${!canOrder ? 'opacity-60' : ''}" onclick="openMealModal('${meal.type}','${info.id || '0'}',${clickable})">
-                        <div class="img-placeholder h-32 sm:h-40 text-4xl">${meal.icon}</div>
-                        <div class="p-4"><div class="flex items-start justify-between"><div class="flex-1"><h3 class="font-bold text-gray-800">${meal.name}</h3><p class="text-sm text-gray-500">${meal.nameEn}</p></div>${isSel ? '<div class="w-6 h-6 bg-success rounded-full flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>' : ''}</div>
-                        <p class="mt-2 text-sm text-gray-600 line-clamp-2">${mealName || meal.desc}</p>
-                        ${!canOrder ? '<div class="mt-2 text-xs text-orange-600 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>僅供查看</div>' : ''}
-                        ${qtyHtml}
-                        <button type="button" class="select-btn w-full mt-3 py-2 px-4 rounded-lg font-medium transition-all duration-300 ${isSel ? 'bg-success text-white' : !canOrder ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-primary-50 text-primary hover:bg-primary hover:text-white'}" onclick="event.stopPropagation();${clickable && canOrder ? `selectMeal('${meal.type}','${info.id || '0'}')` : ''}" ${!clickable ? 'disabled' : ''}>${!canOrder ? '無法訂餐' : isSel ? '✓ 已選擇' : meal.type === '不訂餐' ? '登記不訂餐' : '選擇此餐點'}</button></div></div>`;
-              }
-          });
-          container.innerHTML = html || '<div class="col-span-full text-center py-12 text-gray-500">今日無可選餐點</div>';
-      }
-
-      // === Quantity change ===
-      function changeQty(delta) {
-          var dateStr = weekDates[selectedDateIndex].dateStr;
-          var order = ordersData[dateStr]; if (!order) return;
-          var cur = parseInt(order.orderNum) || 1;
-          var nv = Math.max(1, cur + delta);
-          order.orderNum = String(nv);
-          renderMealCards(); updateWeeklySummary();
-      }
-
-      // === Select meal (same as index.aspx, with orderNum) ===
+          var html = '';
+          mealTypes.forEach(meal => {
+              var info = dayMeals[meal.type] || {};
+              var avail = info.available !== false && (meal.type === '不訂餐' || meal.type === '素食' || info.name);
+              var isSel = dayOrder.type === meal.type || (meal.type === '不訂餐' && dayOrder.lunchId === '0' && dayOrder.type === '不訂餐');
+              var mealName = info.name || meal.desc || '';
+              var clickable = avail && canOrder;
+              var orderNum = parseInt(dayOrder.orderNum) || 1;
+              if (meal.type === '不訂餐' || meal.type === '素食' || info.name) {
+                  // Quantity stepper HTML (admin feature, not on 不訂餐)
+                  var qtyHtml = '';
+                  if (meal.type !== '不訂餐' && isSel) {
+                      qtyHtml = `<div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100"><span class="text-xs text-gray-500 font-medium">訂餐份數</span><div class="qty-stepper"><button type="button" onclick="event.stopPropagation();changeQty(-1)">−</button><span class="qty-val" id="qtyVal">${orderNum}</span><button type="button" onclick="event.stopPropagation();changeQty(1)">+</button></div></div>`;
+                  }
+                  html += `<div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden border-2 transition-all duration-300 cursor-pointer ${isSel ? 'meal-selected border-success' : 'border-transparent'} ${!canOrder ? 'opacity-60' : ''}" onclick="openMealModal('${meal.type}','${info.id || '0'}',${clickable})">
+                        <div class="img-placeholder h-32 sm:h-40 text-4xl">${meal.icon}</div>
+                        <div class="p-4"><div class="flex items-start justify-between"><div class="flex-1"><h3 class="font-bold text-gray-800">${meal.name}</h3><p class="text-sm text-gray-500">${meal.nameEn}</p></div>${isSel ? '<div class="w-6 h-6 bg-success rounded-full flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>' : ''}</div>
+                        <p class="mt-2 text-sm text-gray-600 line-clamp-2">${mealName || meal.desc}</p>
+                        ${!canOrder ? '<div class="mt-2 text-xs text-orange-600 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>僅供查看</div>' : ''}
+                        ${qtyHtml}
+                        <button type="button" class="select-btn w-full mt-3 py-2 px-4 rounded-lg font-medium transition-all duration-300 ${isSel ? 'bg-success text-white' : !canOrder ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-primary-50 text-primary hover:bg-primary hover:text-white'}" onclick="event.stopPropagation();${clickable && canOrder ? `selectMeal('${meal.type}','${info.id || '0'}')` : ''}" ${!clickable ? 'disabled' : ''}>${!canOrder ? '無法訂餐' : isSel ? '✓ 已選擇' : meal.type === '不訂餐' ? '登記不訂餐' : '選擇此餐點'}</button></div></div>`;
+              }
+          });
+          container.innerHTML = html || '<div class="col-span-full text-center py-12 text-gray-500">今日無可選餐點</div>';
+      }
+
+      // === Quantity change ===
+      function changeQty(delta) {
+          var dateStr = weekDates[selectedDateIndex].dateStr;
+          var order = ordersData[dateStr]; if (!order) return;
+          var cur = parseInt(order.orderNum) || 1;
+          var nv = Math.max(1, cur + delta);
+          order.orderNum = String(nv);
+          renderMealCards(); updateWeeklySummary();
+      }
+
+      // === Select meal (same as index.aspx, with orderNum) ===
       function selectMeal(mealType, lunchId) {
 
           var dateStr = weekDates[selectedDateIndex].dateStr;
@@ -1525,56 +1533,56 @@
 
           renderMealCards(); updateWeeklySummary();
 
-      }
-
-      // === Weekly Summary (same as index.aspx + shows qty) ===
-      function updateWeeklySummary() {
-          var desktopEl = document.getElementById('weeklySummaryDesktop'), mobileEl = document.getElementById('weeklySummaryMobile'), countEl = document.getElementById('summaryCount');
-          var ordered = 0;
-          var html = weekDates.map((d, i) => {
-              var order = ordersData[d.dateStr]; var st = '未選擇', sc = 'text-gray-400', ic = '<span class="text-gray-400">○</span>';
-              if (order && (order.orderNum !== '0' || order.type === '不訂餐')) {
-                  ordered++;
-                  if (order.type === '不訂餐') { st = '不訂餐'; sc = 'text-gray-500'; ic = '<span class="text-gray-500">✗</span>'; }
-                  else { var q = parseInt(order.orderNum) || 1; st = order.type + (q > 1 ? ' ×' + q : ''); sc = 'text-success font-medium'; ic = '<span class="text-success">✓</span>'; }
-              }
-              return `<div class="flex items-center justify-between py-2 ${i === selectedDateIndex ? 'bg-primary-50 -mx-2 px-2 rounded-lg' : ''}"><div class="flex items-center space-x-2">${ic}<span class="text-gray-700">${d.display}</span></div><span class="${sc}">${st}</span></div>`;
-          }).join('');
-          if (desktopEl) desktopEl.innerHTML = html; if (mobileEl) mobileEl.innerHTML = html;
-          if (countEl) countEl.textContent = ordered + '/5 已登記';
-      }
-
-      // === Save (same as index.aspx) ===
-      function saveAllOrders() {
-          showLoading(true);
-          PageMethods.SaveWeekOrders(JSON.stringify(ordersData), function (r) {
-              showLoading(false);
-              if (r.success) showToast('訂餐成功！'); else showToast(r.message || '儲存失敗', false);
-          }, function (e) { showLoading(false); showToast('發生錯誤', false); });
-      }
-
-      // === Mobile summary, loading, toast, modal (same as index.aspx) ===
-      function toggleMobileSummary() { var c = document.getElementById('summaryCollapsed'), e = document.getElementById('summaryExpanded'); if (e.classList.contains('hidden')) { c.classList.add('hidden'); e.classList.remove('hidden'); } else { e.classList.add('hidden'); c.classList.remove('hidden'); } }
-      function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('hidden', !show); }
-      function showToast(msg, ok = true) { var t = document.getElementById('toast'), m = document.getElementById('toastMessage'); m.textContent = msg; t.querySelector('div').className = (ok ? 'bg-success' : 'bg-red-500') + ' text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2'; t.classList.remove('translate-y-20', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { t.classList.add('translate-y-20', 'opacity-0'); t.classList.remove('translate-y-0', 'opacity-100'); }, 3000); }
-      function openMealModal(mealType, lunchId, clickable) {
+      }
+
+      // === Weekly Summary (same as index.aspx + shows qty) ===
+      function updateWeeklySummary() {
+          var desktopEl = document.getElementById('weeklySummaryDesktop'), mobileEl = document.getElementById('weeklySummaryMobile'), countEl = document.getElementById('summaryCount');
+          var ordered = 0;
+          var html = weekDates.map((d, i) => {
+              var order = ordersData[d.dateStr]; var st = '未選擇', sc = 'text-gray-400', ic = '<span class="text-gray-400">○</span>';
+              if (order && (order.orderNum !== '0' || order.type === '不訂餐')) {
+                  ordered++;
+                  if (order.type === '不訂餐') { st = '不訂餐'; sc = 'text-gray-500'; ic = '<span class="text-gray-500">✗</span>'; }
+                  else { var q = parseInt(order.orderNum) || 1; st = order.type + (q > 1 ? ' ×' + q : ''); sc = 'text-success font-medium'; ic = '<span class="text-success">✓</span>'; }
+              }
+              return `<div class="flex items-center justify-between py-2 ${i === selectedDateIndex ? 'bg-primary-50 -mx-2 px-2 rounded-lg' : ''}"><div class="flex items-center space-x-2">${ic}<span class="text-gray-700">${d.display}</span></div><span class="${sc}">${st}</span></div>`;
+          }).join('');
+          if (desktopEl) desktopEl.innerHTML = html; if (mobileEl) mobileEl.innerHTML = html;
+          if (countEl) countEl.textContent = ordered + '/5 已登記';
+      }
+
+      // === Save (same as index.aspx) ===
+      function saveAllOrders() {
+          showLoading(true);
+          PageMethods.SaveWeekOrders(JSON.stringify(ordersData), function (r) {
+              showLoading(false);
+              if (r.success) showToast('訂餐成功！'); else showToast(r.message || '儲存失敗', false);
+          }, function (e) { showLoading(false); showToast('發生錯誤', false); });
+      }
+
+      // === Mobile summary, loading, toast, modal (same as index.aspx) ===
+      function toggleMobileSummary() { var c = document.getElementById('summaryCollapsed'), e = document.getElementById('summaryExpanded'); if (e.classList.contains('hidden')) { c.classList.add('hidden'); e.classList.remove('hidden'); } else { e.classList.add('hidden'); c.classList.remove('hidden'); } }
+      function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('hidden', !show); }
+      function showToast(msg, ok = true) { var t = document.getElementById('toast'), m = document.getElementById('toastMessage'); m.textContent = msg; t.querySelector('div').className = (ok ? 'bg-success' : 'bg-red-500') + ' text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2'; t.classList.remove('translate-y-20', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { t.classList.add('translate-y-20', 'opacity-0'); t.classList.remove('translate-y-0', 'opacity-100'); }, 3000); }
+      function openMealModal(mealType, lunchId, clickable) {
           var dateStr = weekDates[selectedDateIndex].dateStr, dayMeals = mealsData[dateStr] || {}, dayOrder = ordersData[dateStr] || {};
 
-          var canOrder = isDateOrderable(weekDates[selectedDateIndex].date);
-          var meal = mealTypes.find(m => m.type === mealType), info = dayMeals[mealType] || {};
-          var isSel = dayOrder.type === mealType, mealName = info.name || meal.desc || '';
-          document.getElementById('modalIcon').textContent = meal.icon;
-          document.getElementById('modalTitle').textContent = meal.name;
-          document.getElementById('modalSubtitle').textContent = meal.nameEn;
-          document.getElementById('modalImage').innerHTML = `<div class="text-6xl h-full flex items-center justify-center">${meal.icon}</div>`;
-          document.getElementById('modalDate').textContent = weekDates[selectedDateIndex].display;
-          document.getElementById('modalDescription').innerHTML = mealName || '本餐點為' + meal.name;
-          document.getElementById('modalActions').innerHTML = `${clickable && canOrder ? `<button type="button" onclick="selectMealFromModal('${mealType}','${lunchId}')" class="flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${isSel ? 'bg-success' : 'bg-primary hover:bg-primary-dark'} text-white shadow-lg">${isSel ? '✓ 已選擇' : mealType === '不訂餐' ? '登記不訂餐' : '選擇此餐點'}</button>` : '<div class="flex-1 py-3 px-6 rounded-xl bg-gray-200 text-gray-500 text-center font-semibold">無法訂餐</div>'}<button type="button" onclick="closeModal()" class="py-3 px-6 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50">關閉</button>`;
-          document.getElementById('mealModal').classList.add('active'); document.body.style.overflow = 'hidden';
-      }
-      function closeModal(e) { if (e && e.target.id !== 'mealModal') return; document.getElementById('mealModal').classList.remove('active'); document.body.style.overflow = ''; }
-      function selectMealFromModal(t, id) { selectMeal(t, id); closeModal(); }
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+          var canOrder = isDateOrderable(weekDates[selectedDateIndex].date);
+          var meal = mealTypes.find(m => m.type === mealType), info = dayMeals[mealType] || {};
+          var isSel = dayOrder.type === mealType, mealName = info.name || meal.desc || '';
+          document.getElementById('modalIcon').textContent = meal.icon;
+          document.getElementById('modalTitle').textContent = meal.name;
+          document.getElementById('modalSubtitle').textContent = meal.nameEn;
+          document.getElementById('modalImage').innerHTML = `<div class="text-6xl h-full flex items-center justify-center">${meal.icon}</div>`;
+          document.getElementById('modalDate').textContent = weekDates[selectedDateIndex].display;
+          document.getElementById('modalDescription').innerHTML = mealName || '本餐點為' + meal.name;
+          document.getElementById('modalActions').innerHTML = `${clickable && canOrder ? `<button type="button" onclick="selectMealFromModal('${mealType}','${lunchId}')" class="flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${isSel ? 'bg-success' : 'bg-primary hover:bg-primary-dark'} text-white shadow-lg">${isSel ? '✓ 已選擇' : mealType === '不訂餐' ? '登記不訂餐' : '選擇此餐點'}</button>` : '<div class="flex-1 py-3 px-6 rounded-xl bg-gray-200 text-gray-500 text-center font-semibold">無法訂餐</div>'}<button type="button" onclick="closeModal()" class="py-3 px-6 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50">關閉</button>`;
+          document.getElementById('mealModal').classList.add('active'); document.body.style.overflow = 'hidden';
+      }
+      function closeModal(e) { if (e && e.target.id !== 'mealModal') return; document.getElementById('mealModal').classList.remove('active'); document.body.style.overflow = ''; }
+      function selectMealFromModal(t, id) { selectMeal(t, id); closeModal(); }
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     </script >
 </body>
 
